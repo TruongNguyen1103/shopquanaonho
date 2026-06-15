@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Shop Full</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#f5f5f5;
+}
+
+/* ===== INTRO ===== */
+
+#introPage{
+    width:100%;
+    height:100vh;
+    background:url("thietkeweb-2.png");
+    background-size:cover;
+    background-position:center;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:9999;
+}
+
+.overlay{
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.15);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.enter-btn{
+    margin-top:320px;
+    padding:15px 40px;
+    font-size:22px;
+    border:none;
+    border-radius:50px;
+    background:#1f2a44;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+    font-weight:bold;
+}
+
+.enter-btn:hover{
+    background:#32456b;
+    transform:scale(1.05);
+}
+
+/* ===== HEADER ===== */
+
+header{
+    background:#111;
+    color:white;
+    padding:20px;
+    text-align:center;
+    position:relative;
+}
+
+.top-buttons{
+    position:absolute;
+    right:20px;
+    top:20px;
+}
+
+.top-buttons button{
+    margin-left:10px;
+}
+
+/* ===== NAV ===== */
+
+nav{
+    background:#222;
+    padding:15px;
+    text-align:center;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin:0 15px;
+    font-weight:bold;
+}
+
+/* ===== BANNER ===== */
+
+.banner{
+    height:300px;
+    background:url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop') center/cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:40px;
+    font-weight:bold;
+}
+
+/* ===== PRODUCTS ===== */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    padding:40px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    loading:lazy;
+}
+.card-content{
+    padding:15px;
+}
+
+.price{
+    color:red;
+    font-size:20px;
+    margin:10px 0;
+}
+
+button{
+    background:black;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#444;
+}
+
+.admin-buttons{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+}
+.product-buttons{
+    display:flex;
+    gap:5px;
+    margin-top:10px;
+}
+.product-buttons button{
+    flex:1;
+    font-size:12px;
+}
+/* ===== MODAL ===== */
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.modal-box{
+    background:white;
+    padding:30px;
+    width:350px;
+    border-radius:10px;
+}
+
+.modal-box h2{
+    margin-bottom:20px;
+    text-align:center;
+}
+
+.modal-box input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.close{
+    float:right;
+    cursor:pointer;
+    font-size:20px;
+}
+
+/* ===== CART ===== */
+
+.cart-box{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:300px;
+    background:white;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    max-height:400px;
+    overflow:auto;
+}
+
+.cart-item{
+    margin-bottom:10px;
+    border-bottom:1px solid #ddd;
+    padding-bottom:10px;
+}
+
+/* ===== FOOTER ===== */
+
+footer{
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:30px;
+}
+
+#userText{
+    margin-top:10px;
+    color:yellow;
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:768px){
+
+    .top-buttons{
+        position:static;
+        margin-top:15px;
+    }
+
+    .cart-box{
+        width:90%;
+        left:5%;
+        right:5%;
+    }
+
+    .enter-btn{
+        margin-top:400px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ===== INTRO ===== -->
+
+<div id="introPage">
+
+    <div class="overlay">
+
+        <button class="enter-btn" onclick="enterShop()">
+            VÀO SHOP
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ===== WEBSITE ===== -->
+
+<header>
+
+    <h1>FASHION SHOP</h1>
+
+    <p>Website bán quần áo mini</p>
+
+    <div id="userText"></div>
+    <div id="walletText"></div>
+
+    <div class="top-buttons">
+
+        <button onclick="openLogin()">
+            Đăng nhập
+        </button>
+
+        <button onclick="openRegister()">
+            Đăng ký
+        </button>
+
+        <button onclick="openAdmin()">
+            + Sản phẩm
+        </button>
+
+    </div>
+
+</header>
+
+<nav>
+    <a href="#">Trang chủ</a>
+    <a href="#">Sản phẩm</a>
+    <a href="#">Liên hệ</a>
+</nav>
+
+<div class="banner">
+    NEW COLLECTION
+</div>
+
+<!-- ===== PRODUCTS ===== -->
+
+<section class="products" id="productList">
+
+    <!-- 1 -->
+ <div class="card">
+ <img src="https://down-vn.img.susercontent.com/file/sg-11134201-7rbml-lq9jokwjehbu26">
+ <div class="card-content">
+ <h3>Áo Hoodie Mùa Đông</h3>
+ <p class="price">300.000đ</p>
+ <div class="product-buttons">
+    <button onclick="addToCart('Áo Hoodie Mùa Đông',300000)">
+        Thêm vào giỏ
+    </button>
+    <button onclick="buyNow('Áo Hoodie Mùa Đông',300000)">
+        Mua ngay
+    </button>
+    <button onclick="hideProduct(this)">
+        Ẩn hàng
+    </button>
+</div>
+     <div class="admin-buttons">
+        <button onclick="deleteProduct(this)">Xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="card">
+        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m4daz5ryiojz36">
+        <div class="card-content">
+            <h3>Áo Khoác Len</h3>
+            <p class="price">320.000đ</p>
+            <div class="product-buttons">
+    <button onclick="addToCart('Áo Khoác Len',320000)">
+        Thêm vào giỏ
+    </button>
+    <button onclick="buyNow('Áo Khoác Len',320000)">
+        Mua ngay
+    </button>
+    <button onclick="hideProduct(this)">
+        Ẩn hàng
+    </button>
+</div>
+            <div class="admin-buttons">
+                <button onclick="deleteProduct(this)">Xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop">
+        <div class="card-content">
+            <h3>Áo Sweater Basic</h3>
+            <p class="price">250.000đ</p>
+          <div class="product-buttons">
+    <button onclick="addToCart('Áo Sweater Basic',250000)">
+        Thêm vào giỏ
+    </button>
+    <button onclick="buyNow('Áo Sweater Basic',250000)">
+        Mua ngay
+    </button>
+    <button onclick="hideProduct(this)">
+        Ẩn hàng
+    </button>
+</div>
+            <div class="admin-buttons">
+                <button onclick="deleteProduct(this)">Xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="card">
+        <img src="set-vest-1250k.png">
+        <div class="card-content">
+            <h3>Set Vest Thời Trang</h3>
+            <p class="price">1.250.000đ</p>
+<div class="product-buttons">
+    <button onclick="addToCart('Set Vest Thời Trang',1250000)">
+        Thêm vào giỏ
+    </button>
+    <button onclick="buyNow('Set Vest Thời Trang',1250000)">
+        Mua ngay
+    </button>
+    <button onclick="hideProduct(this)">
+        Ẩn hàng
+    </button>
+</div>
+            <div class="admin-buttons">
+                <button onclick="deleteProduct(this)">Xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=800&auto=format&fit=crop">
+        <div class="card-content">
+            <h3>Váy Mùa Hè</h3>
+            <p class="price">270.000đ</p>
+           <div class="product-buttons">
+    <button onclick="addToCart('Váy Mùa Hè',270000)">
+        Thêm vào giỏ
+    </button>
+    <button onclick="buyNow('Váy Mùa Hè',270000)">
+        Mua ngay
+    </button>
+    <button onclick="hideProduct(this)">
+        Ẩn hàng
+    </button>
+</div>
+      <div class="admin-buttons">
+           <button onclick="deleteProduct(this)">Xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="card">
+        <img src="https://pubcdn.ivymoda.com/files/product/thumab/1400/2023/02/16/e6863ea53ac30ed538d4364629393ce9.jpg">
+        <div class="card-content">
+            <h3>Áo Thun Basic</h3>
+            <p class="price">190.000đ</p>
+        <div class="product-buttons">
+    <button onclick="addToCart('Áo Thun Basic',190000)">
+        Thêm vào giỏ
+    </button>
+    <button onclick="buyNow('Áo Thun Basic',190000)">
+        Mua ngay
+    </button>
+    <button onclick="hideProduct(this)">
+        Ẩn hàng
+    </button>
+</div>
+            <div class="admin-buttons">
+                <button onclick="deleteProduct(this)">Xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop">
+        <div class="card-content">
+            <h3>Quần Jeans Form Rộng</h3>
+            <p class="price">299.000đ</p>
+         <div class="product-buttons">
+    <button onclick="addToCart('Quần Jeans Form Rộng',299000)">
+        Thêm vào giỏ
+    </button>
+    <button onclick="buyNow('Quần Jeans Form Rộng',299000)">
+        Mua ngay
+    </button>
+    <button onclick="hideProduct(this)">
+        Ẩn hàng
+    </button>
+</div>
+      <div class="admin-buttons">
+           <button onclick="deleteProduct(this)">Xóa</button>
+            </div>
+        </div>
+    </div>
+
+<!-- 8 -->
+<div class="card">
+  <img src="https://file.hstatic.net/1000197303/file/dam-tieu-thu1_422bed68697842ed91fb57b1d214a748.jpg">
+     <div class="card-content">
+        <h3>Đầm Tiểu Thư</h3>
+    <p class="price">520.000đ</p>
+           <div class="product-buttons">
+    <button onclick="addToCart('Đầm Tiểu Thư',520000)">
+        Thêm vào giỏ
+    </button>
+    <button onclick="buyNow('Đầm Tiểu Thư',520000)">
+        Mua ngay
+    </button>
+    <button onclick="hideProduct(this)">
+        Ẩn hàng
+    </button>
+</div>
+            <div class="admin-buttons">
+                <button onclick="deleteProduct(this)">Xóa</button>
+     </div>         
+    </div>
+   </div>
+   
+<!-- 9 -->
+<div class="card">
+    <img src="https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99">
+    <div class="card-content">
+        <h3>Áo Polo Nam</h3>
+        <p class="price">149.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Polo Nam',149000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Polo Nam',149000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 10 -->
+<div class="card">
+    <img src="https://images.unsplash.com/photo-1603252109303-2751441dd157">
+    <div class="card-content">
+        <h3>Áo Sơ Mi Trắng</h3>
+        <p class="price">159.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Sơ Mi Trắng',159000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Sơ Mi Trắng',159000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 11 -->
+<div class="card">
+    <img src="https://thoitrangbigsize.vn/wp-content/uploads/2025/04/8608-luoi-trang.jpg">
+    <div class="card-content">
+        <h3>Áo Sơ Mi Kẻ Sọc</h3>
+        <p class="price">229.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Sơ Mi Kẻ Sọc',229000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Sơ Mi Kẻ Sọc',229000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 12 -->
+<div class="card">
+    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab">
+    <div class="card-content">
+        <h3>Áo Thun Oversize</h3>
+        <p class="price">129.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Thun Oversize',129000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Thun Oversize',129000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 13 -->
+<div class="card">
+    <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c">
+    <div class="card-content">
+        <h3>Áo Thun In Hình</h3>
+        <p class="price">149.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Thun In Hình',149000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Thun In Hình',149000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 14 -->
+<div class="card">
+    <img src="https://product.hstatic.net/200000000133/product/24aawe008b_-_24aqqe023d_e207ddfae48241acaf435ee111b733a6_master.jpg">
+    <div class="card-content">
+        <h3>Áo Hai Dây</h3>
+        <p class="price">69.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Hai Dây',69000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Hai Dây',69000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+<!-- 15 -->
+<div class="card">
+    <img src="https://lados.vn/wp-content/uploads/2025/02/ao-thun-ba-lo-nam-dep-gia-tot-lados-ld9203-600x600.jpg">
+    <div class="card-content">
+        <h3>Áo Ba Lỗ Nam</h3>
+        <p class="price">89.000đ
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Ba Lỗ Nam',89000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Ba Lỗ Nam',89000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 16 -->
+<div class="card">
+    <img src="https://aokhoacnam.vn/upload/product/akn-182/ao-khoac-gio-nam-ghi-chinh-hang.jpg">
+    <div class="card-content">
+        <h3>Áo Khoác Gió</h3>
+        <p class="price">349.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Khoác Gió',349000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Khoác Gió',349000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 17 -->
+<div class="card">
+    <img src="https://thoitrangbigsize.vn/wp-content/uploads/2024/09/BS3024.jpg">
+    <div class="card-content">
+        <h3>Áo Len Cổ Lọ</h3>
+        <p class="price">199.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Áo Len Cổ Lọ',199000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Áo Len Cổ Lọ',199000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 18 -->
+<div class="card">
+    <img src="https://nhatminhsports.vn/wp-content/uploads/2025/03/U2664630-1.jpg">
+    <div class="card-content">
+        <h3>Quần Dài Nam</h3>
+        <p class="price">159.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Quần Tây Nam',159000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Quần Tây Nam',159000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+       <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 19 -->
+<div class="card">
+    <img src="https://nhatminhsports.vn/wp-content/uploads/2025/09/M20042_zoom_D.jpg">
+    <div class="card-content">
+        <h3>Mũ Bucket</h3>
+        <p class="price">59.000đ</p>
+        <div class="product-buttons">
+            <button onclick="addToCart('Mũ Bucket',59000)">
+                Thêm vào giỏ
+            </button>
+            <button onclick="buyNow('Mũ Bucket',59000)">
+                Mua ngay
+            </button>
+            <button onclick="hideProduct(this)">
+                Ẩn hàng
+            </button>
+        </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<!-- 20 -->
+<div class="card">
+    <img src="https://bizweb.dktcdn.net/thumb/1024x1024/100/449/472/products/sg-11134201-22110-9yawj7p4svjvb1-1668422066772.jpg?v=1668422071113">
+    <div class="card-content">
+    <h3>Tất Nam nữ</h3>
+    <p class="price">20.000đ</p>
+    <div class="product-buttons">
+    <button onclick="addToCart('Tất Nam nữ',20000)">
+                Thêm vào giỏ
+     </button>
+     <button onclick="buyNow('Tất Nam nữ',20000)">
+                Mua ngay
+     </button>
+     <button onclick="hideProduct(this)">
+       Ẩn hàng
+      </button>
+    </div>
+        <div class="admin-buttons">
+            <button onclick="deleteProduct(this)">Xóa</button>
+        </div>
+    </div>
+</div>
+
+</section>
+<!-- ===== LOGIN ===== -->
+<div class="modal" id="loginModal">
+    <div class="modal-box">
+        <span class="close" onclick="closeLogin()">×</span>
+        <h2>Đăng nhập</h2>
+        <input type="text" id="loginUser" placeholder="Tên đăng nhập">
+        <input type="password" id="loginPass" placeholder="Mật khẩu">
+        <button style="width:100%;" onclick="login()">
+            Đăng nhập
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ===== REGISTER ===== -->
+
+<div class="modal" id="registerModal">
+
+    <div class="modal-box">
+
+        <span class="close" onclick="closeRegister()">×</span>
+
+        <h2>Đăng ký</h2>
+
+        <input type="text" id="regUser" placeholder="Tên đăng nhập">
+
+        <input type="password" id="regPass" placeholder="Mật khẩu">
+
+        <input type="password" id="regPass2" placeholder="Nhập lại mật khẩu">
+
+        <input type="text" id="regPhone" placeholder="Số điện thoại">
+
+        <input type="text" id="regAddress" placeholder="Địa chỉ nhận hàng">
+       
+        <button style="width:100%;" onclick="register()">
+            Đăng ký
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ===== ADMIN ===== -->
+
+<div class="modal" id="adminModal">
+
+    <div class="modal-box">
+
+        <span class="close" onclick="closeAdmin()">×</span>
+
+        <h2>Thêm sản phẩm</h2>
+
+        <input type="text" id="productName" placeholder="Tên sản phẩm">
+
+        <input type="text" id="productPrice" placeholder="Giá sản phẩm">
+
+        <input type="text" id="productImage" placeholder="Link hình ảnh">
+
+        <button style="width:100%;" onclick="addProduct()">
+            Thêm sản phẩm
+        </button>
+
+    </div>
+
+</div>
+
+<!-- ===== CART ===== -->
+<div class="cart-box">
+
+    <h2>🛒 Giỏ hàng</h2>
+
+    <div id="cartItems"></div>
+
+    <h3 id="totalPrice">
+        Tổng: 0đ
+    </h3>
+
+    <button style="width:100%;margin-top:10px;"
+    onclick="checkout()">
+        Thanh toán
+    </button>
+</div>
+<footer>
+    © 2026 Fashion Shop
+    <br>
+    📞 Hotline: 1900 0002
+</footer>
+<script>
+
+/* ===== INTRO ===== */
+
+function enterShop(){
+
+    document.getElementById("introPage").style.display = "none";
+
+}
+
+/* ===== LOGIN ===== */
+
+function openLogin(){
+    document.getElementById("loginModal").style.display = "flex";
+}
+
+function closeLogin(){
+    document.getElementById("loginModal").style.display = "none";
+}
+
+ function login(){
+
+    let user = document.getElementById("loginUser").value;
+
+    let pass = document.getElementById("loginPass").value;
+
+    let savedUser = localStorage.getItem("username");
+
+    let savedPass = localStorage.getItem("password");
+
+    if(user === savedUser && pass === savedPass){
+
+        document.getElementById("userText").innerHTML =
+        "Xin chào, " + user;
+        
+        let wallet =
+        localStorage.getItem("walletBalance") || 0;
+
+        document.getElementById("walletText").innerHTML =
+        "Số dư ví: " +
+        Number(wallet).toLocaleString() +
+        "đ";
+        
+        alert("Đăng nhập thành công!");
+        closeLogin();
+        document.getElementById("introPage").style.display = "none";
+    }else{
+
+        alert("Sai tài khoản hoặc mật khẩu!");
+
+    }
+
+}
+
+/* ===== REGISTER ===== */
+
+function openRegister(){
+    document.getElementById("registerModal").style.display = "flex";
+}
+
+function closeRegister(){
+    document.getElementById("registerModal").style.display = "none";
+}
+
+function register(){
+
+    let user = document.getElementById("regUser").value;
+
+    let pass = document.getElementById("regPass").value;
+
+    let pass2 = document.getElementById("regPass2").value;
+
+    let phone = document.getElementById("regPhone").value;
+
+    let address = document.getElementById("regAddress").value;
+    
+    if(
+    user === "" ||
+    pass === "" ||
+    pass2 === "" ||
+    phone === "" ||
+    address === ""
+){
+    alert("Nhập đầy đủ thông tin!");
+    return;
+}
+
+if(pass !== pass2){
+
+    alert("Mật khẩu không khớp!");
+    return;
+}
+
+localStorage.setItem("username", user);
+localStorage.setItem("password", pass);
+localStorage.setItem("phone", phone);
+localStorage.setItem("address", address);
+localStorage.setItem("walletBalance", 0);
+alert("Đăng ký thành công!");
+closeRegister();
+
+document.getElementById("introPage").style.display = "none";
+}
+
+/* ===== ADMIN ===== */
+
+function openAdmin(){
+    document.getElementById("adminModal").style.display = "flex";
+}
+
+function closeAdmin(){
+    document.getElementById("adminModal").style.display = "none";
+}
+
+function addProduct(){
+
+    let name = document.getElementById("productName").value;
+    let price = document.getElementById("productPrice").value;
+    let image = document.getElementById("productImage").value;
+
+    if(name === "" || price === "" || image === ""){
+
+        alert("Nhập đầy đủ thông tin!");
+        return;
+    }
+
+    let product = `
+
+    <div class="card">
+
+        <img src="${image}">
+
+        <div class="card-content">
+
+            <h3>${name}</h3>
+
+            <p class="price">${price}đ</p>
+
+            <button onclick="addToCart('${name}',${price})">
+                Mua ngay
+            </button>
+
+            <div class="admin-buttons">
+
+                <button onclick="deleteProduct(this)">
+                    Xóa
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    `;
+
+    document.getElementById("productList").innerHTML += product;
+
+    alert("Thêm sản phẩm thành công!");
+
+    closeAdmin();
+
+}
+
+/* ===== DELETE ===== */
+
+function deleteProduct(button){
+
+    button.closest(".card").remove();
+
+    alert("Đã xóa sản phẩm!");
+
+}
+
+/* ===== CART ===== */
+
+let total = 0;
+let cart = [];
+function addToCart(name, price){
+    cart.push({
+        name: name,
+        price: price
+    });
+    renderCart();
+    alert("Đã thêm vào giỏ hàng!");
+}
+function removeFromCart(index){
+    cart.splice(index, 1);
+    renderCart();
+}
+
+function renderCart(){
+    let cartItems =
+    document.getElementById("cartItems");
+    cartItems.innerHTML = "";
+    total = 0;
+    cart.forEach((item,index)=>{
+        total += Number(item.price);
+        cartItems.innerHTML += `
+        <div class="cart-item">
+            ${item.name} -
+            ${item.price.toLocaleString()}đ
+            <button
+            onclick="removeFromCart(${index})"
+            style="float:right;background:red;">
+                Xóa
+            </button>
+        </div>
+        `;
+    });
+
+    document.getElementById("totalPrice").innerHTML =
+    "Tổng: " + total.toLocaleString() + "đ";
+    localStorage.setItem(
+        "cartItems",
+        JSON.stringify(cart)
+    );
+}
+
+function checkout(){
+    if(total <= 0){
+        alert("Giỏ hàng đang trống!");
+        return;
+    }
+    localStorage.setItem(
+        "checkoutTotal",
+        total
+    );
+    window.location.href = "checkout.html";
+}
+function buyNow(name, price){
+
+    localStorage.setItem(
+        "cartItems",
+        JSON.stringify([{
+            name:name,
+            price:price,
+            quantity:1
+        }])
+    );
+
+    localStorage.setItem(
+        "checkoutTotal",
+        price
+    );
+
+    window.location.href = "checkout.html";
+}
+function hideProduct(button){
+    button.closest(".card").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>

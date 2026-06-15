@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thanh toán</title>
+<style>
+body{
+    font-family:Arial;
+    background:#f5f5f5;
+    padding:20px;
+}
+
+.box{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+.product-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    border:1px solid #ddd;
+    margin-bottom:10px;
+    border-radius:8px;
+    background:#fafafa;
+}
+select,input,button{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+
+<h2>Thanh toán đơn hàng</h2>
+
+<h3>Sản phẩm đã chọn</h3>
+
+<div id="selectedProducts"></div>
+
+<p id="total"></p>
+
+<p id="wallet"></p>
+<input type="text" placeholder="Họ tên">
+
+<input type="text" placeholder="Số điện thoại">
+
+<input type="text" placeholder="Địa chỉ">
+
+<select id="paymentMethod">
+
+<option value="WALLET">
+Ví Fashion Shop
+</option>
+
+<option value="BANK">
+Chuyển khoản ngân hàng
+</option>
+
+<option value="COD">
+Thanh toán khi nhận hàng
+</option>
+
+</select>
+
+<button onclick="pay()">
+Đặt hàng
+</button>
+
+</div>
+
+<script>
+let products =
+JSON.parse(localStorage.getItem("cartItems")) || [];
+
+let html = "";
+
+products.forEach(item=>{
+
+    html += `
+    <div class="product-item">
+        <span>${item.name}</span>
+        <span>${item.price.toLocaleString()}đ</span>
+    </div>
+    `;
+
+});
+
+document.getElementById("selectedProducts").innerHTML =
+html;
+let total =
+Number(localStorage.getItem("checkoutTotal"));
+
+document.getElementById("total").innerHTML =
+"Tổng tiền: " + total.toLocaleString() + "đ";
+
+let wallet =
+Number(localStorage.getItem("walletBalance") || 0);
+
+document.getElementById("wallet").innerHTML =
+"Số dư ví: " + wallet.toLocaleString() + "đ";
+
+function pay(){
+
+    let method =
+    document.getElementById("paymentMethod").value;
+
+    if(method === "WALLET"){
+
+        let balance =
+        Number(localStorage.getItem("walletBalance") || 0);
+
+        if(balance < total){
+
+            alert("Số dư ví không đủ!");
+            return;
+        }
+
+        balance -= total;
+
+        localStorage.setItem(
+            "walletBalance",
+            balance
+        );
+
+        alert("Thanh toán bằng ví thành công!");
+
+    }
+
+    else if(method === "BANK"){
+
+        alert(
+            "MB bank\n" +
+            "STK:111111032006\n" +
+            "Tên TK: FASHION SHOP"
+        );
+
+    }
+
+    else{
+
+        alert(
+            "Đặt hàng thành công!\nThanh toán khi nhận hàng."
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
