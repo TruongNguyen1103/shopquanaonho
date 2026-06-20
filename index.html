@@ -295,25 +295,32 @@ footer{
     <h1>FASHION SHOP</h1>
 
     <p>Website bán quần áo mini</p>
-
     <div id="userText"></div>
     <div id="walletText"></div>
+<div class="top-buttons">
 
-    <div class="top-buttons">
+    <button onclick="window.location.href='orders.html'">
+        📦 Đơn hàng
+    </button>
 
-        <button onclick="openLogin()">
-            Đăng nhập
-        </button>
+    <button id="loginBtn" onclick="openLogin()">
+        Đăng nhập
+    </button>
 
-        <button onclick="openRegister()">
-            Đăng ký
-        </button>
+    <button id="registerBtn" onclick="openRegister()">
+        Đăng ký
+    </button>
 
-        <button onclick="openAdmin()">
-            + Sản phẩm
-        </button>
+    <button id="logoutBtn"
+       onclick="logout()"
+    style="display:none;">
+       Đăng xuất
+    </button>
+    <button onclick="openAdmin()">
+       + Sản phẩm
+    </button>
 
-    </div>
+</div>
 
 </header>
 
@@ -796,8 +803,16 @@ footer{
     <div class="modal-box">
         <span class="close" onclick="closeLogin()">×</span>
         <h2>Đăng nhập</h2>
-        <input type="text" id="loginUser" placeholder="Tên đăng nhập">
-        <input type="password" id="loginPass" placeholder="Mật khẩu">
+      <input type="text"
+       id="loginUser"
+       placeholder="Tên đăng nhập"
+       onkeypress="if(event.key==='Enter') login()">
+
+        <input type="password"
+       id="loginPass"
+       placeholder="Mật khẩu"
+       onkeypress="if(event.key==='Enter') login()">
+
         <button style="width:100%;" onclick="login()">
             Đăng nhập
         </button>
@@ -900,33 +915,45 @@ function closeLogin(){
 }
 
  function login(){
-
     let user = document.getElementById("loginUser").value;
-
     let pass = document.getElementById("loginPass").value;
-
+    localStorage.setItem("currentUser", user);
     let savedUser = localStorage.getItem("username");
-
     let savedPass = localStorage.getItem("password");
-
-    if(user === savedUser && pass === savedPass){
-
-        document.getElementById("userText").innerHTML =
-        "Xin chào, " + user;
+    
+    if(user === ADMIN_USER && pass === ADMIN_PASS){
+        isLoggedIn = true;
+        isAdmin = true;
+    localStorage.setItem("currentUser", "anhzaiso1");
+    document.getElementById("userText").innerHTML =
+        "👑 anhzaiso1";
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("registerBtn").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "inline-block";    
+        alert("Đăng nhập Admin thành công!");
+        closeLogin();
+        return;
+        }
+    
+   if(user === savedUser && pass === savedPass){
+        isLoggedIn = true; 
+   localStorage.setItem("currentUser", user);  
+   document.getElementById("userText").innerHTML =
+        "Xin chào, " + user;     
+   document.getElementById("loginBtn").style.display = "none";
+   document.getElementById("registerBtn").style.display = "none";    
+   document.getElementById("logoutBtn").style.display = "inline-block";
         
         let wallet =
         localStorage.getItem("walletBalance") || 0;
 
         document.getElementById("walletText").innerHTML =
         "Số dư ví: " +
-        Number(wallet).toLocaleString() +
-        "đ";
-        
+        Number(wallet).toLocaleString() + "đ";       
         alert("Đăng nhập thành công!");
         closeLogin();
-        document.getElementById("introPage").style.display = "none";
+    document.getElementById("introPage").style.display = "none";
     }else{
-
         alert("Sai tài khoản hoặc mật khẩu!");
 
     }
@@ -986,13 +1013,15 @@ document.getElementById("introPage").style.display = "none";
 /* ===== ADMIN ===== */
 
 function openAdmin(){
+    if(!isAdmin){
+        alert("Chỉ Admin mới được thêm sản phẩm!");
+        return;
+    }
     document.getElementById("adminModal").style.display = "flex";
 }
-
 function closeAdmin(){
     document.getElementById("adminModal").style.display = "none";
 }
-
 function addProduct(){
 
     let name = document.getElementById("productName").value;
@@ -1055,14 +1084,28 @@ function deleteProduct(button){
 
 /* ===== CART ===== */
 
+let isLoggedIn = false;
+let isAdmin = false;
+
+const ADMIN_USER = "anhzaiso1";
+const ADMIN_PASS = "1234567@";
 let total = 0;
 let cart = [];
 function addToCart(name, price){
+
+    if(!isLoggedIn){
+        alert("Vui lòng đăng nhập trước!");
+        openLogin();
+        return;
+    }
+
     cart.push({
         name: name,
         price: price
     });
+
     renderCart();
+
     alert("Đã thêm vào giỏ hàng!");
 }
 function removeFromCart(index){
@@ -1110,7 +1153,11 @@ function checkout(){
     window.location.href = "checkout.html";
 }
 function buyNow(name, price){
-
+    if(!isLoggedIn){
+       alert("Vui lòng đăng nhập trước!");
+       openLogin();
+       return;
+      }
     localStorage.setItem(
         "cartItems",
         JSON.stringify([{
@@ -1131,6 +1178,33 @@ function hideProduct(button){
     button.closest(".card").style.display = "none";
 }
 
+function logout(){
+
+    localStorage.removeItem("currentUser");
+    isLoggedIn = false;
+    isAdmin = false;
+    alert("Đã đăng xuất!");
+    location.reload();
+}
+
+window.onload = function(){
+    let savedUser =
+    localStorage.getItem("currentUser");
+    if(savedUser){
+        isLoggedIn = true;
+    document.getElementById("userText").innerHTML =
+        "Xin chào, " + savedUser;
+
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("registerBtn").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "inline-block";
+        let wallet =       
+    localStorage.getItem("walletBalance") || 0;   
+       "Số dư ví: " +
+        Number(wallet).toLocaleString() + "đ";
+    }
+
+}
 </script>
 
 </body>

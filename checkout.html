@@ -47,11 +47,18 @@ select,input,button{
 <p id="total"></p>
 
 <p id="wallet"></p>
-<input type="text" placeholder="Họ tên">
 
-<input type="text" placeholder="Số điện thoại">
+<input type="number"
+id="depositAmount"
+placeholder="Nhập số tiền cần nạp">
 
-<input type="text" placeholder="Địa chỉ">
+<button onclick="depositMoney()">
+💰 Nạp tiền vào ví
+</button>
+
+<input type="text" id="customerName" placeholder="Họ tên">
+<input type="text" id="customerPhone" placeholder="Số điện thoại">
+<input type="text" id="customerAddress" placeholder="Địa chỉ">
 
 <select id="paymentMethod">
 
@@ -106,54 +113,136 @@ Number(localStorage.getItem("walletBalance") || 0);
 document.getElementById("wallet").innerHTML =
 "Số dư ví: " + wallet.toLocaleString() + "đ";
 
-function pay(){
+document.getElementById("customerName").value =
+localStorage.getItem("username") || "";
 
-    let method =
-    document.getElementById("paymentMethod").value;
+document.getElementById("customerPhone").value =
+localStorage.getItem("phone") || "";
 
-    if(method === "WALLET"){
+document.getElementById("customerAddress").value =
+localStorage.getItem("address") || "";
+function depositMoney(){
+let amount =
+Number(document.getElementById("depositAmount").value);
 
-        let balance =
-        Number(localStorage.getItem("walletBalance") || 0);
+if(amount <= 0){
+    alert("Nhập số tiền hợp lệ!");
+    return;
+}
 
-        if(balance < total){
+let wallet =
+Number(localStorage.getItem("walletBalance") || 0);
 
-            alert("Số dư ví không đủ!");
-            return;
-        }
+wallet += amount;
 
-        balance -= total;
+localStorage.setItem("walletBalance", wallet);
 
-        localStorage.setItem(
-            "walletBalance",
-            balance
-        );
+document.getElementById("wallet").innerHTML =
+"Số dư ví: " + wallet.toLocaleString() + "đ";
 
-        alert("Thanh toán bằng ví thành công!");
+alert("Nạp tiền thành công!");
 
+document.getElementById("depositAmount").value = "";
+}
+async function pay(){
+
+let order = {
+    customerName:
+    document.getElementById("customerName").value,
+
+    customerPhone:
+    document.getElementById("customerPhone").value,
+
+    customerAddress:
+    document.getElementById("customerAddress").value,
+
+    products: products,
+
+    total: total,
+
+    paymentMethod:
+    document.getElementById("paymentMethod").value,
+
+    createdAt:
+    new Date().toLocaleString()
+};
+
+await saveOrder(order);
+
+let orders =
+JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.push(order);
+
+localStorage.setItem(
+    "orders",
+    JSON.stringify(orders)
+);
+
+let method =
+document.getElementById("paymentMethod").value;
+
+if(method === "WALLET"){
+
+    let balance =
+    Number(localStorage.getItem("walletBalance") || 0);
+
+    if(balance < total){
+        alert("Số dư ví không đủ!");
+        return;
     }
 
-    else if(method === "BANK"){
+    balance -= total;
 
-        alert(
-            "MB bank\n" +
-            "STK:111111032006\n" +
-            "Tên TK: FASHION SHOP"
-        );
+    localStorage.setItem("walletBalance", balance);
 
-    }
+    alert("Thanh toán bằng ví thành công!");
 
-    else{
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("checkoutTotal");
 
-        alert(
-            "Đặt hàng thành công!\nThanh toán khi nhận hàng."
-        );
-
-    }
+    window.location.href = "index.html";
 
 }
 
-</script>
+else if(method === "BANK"){
+    window.location.href = "bank.html";
+}
+else{
 
+    alert("Đặt hàng thành công!\nThanh toán khi nhận hàng.");
+
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("checkoutTotal");
+    window.location.href = "index.html";
+        }
+         }
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCwV5duPecj4b-CJo1XaAJflB1Yr-hyG14",
+  authDomain: "fashionshop-feb45.firebaseapp.com",
+  projectId: "fashionshop-feb45",
+  storageBucket: "fashionshop-feb45.firebasestorage.app",
+  messagingSenderId: "138813420376",
+  appId: "1:138813420376:web:18f17410c4840e05b8ab2d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.saveOrder = async function(order){
+    await addDoc(collection(db, "orders"), order);
+};
+
+</script>
 </body>
 </html>

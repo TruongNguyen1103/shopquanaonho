@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Chuyển khoản ngân hàng</title>
+
+<style>
+body{
+    font-family:Arial;
+    text-align:center;
+    padding:30px;
+    background:#f5f5f5;
+}
+
+.box{
+    background:white;
+    max-width:500px;
+    margin:auto;
+    padding:20px;
+    border-radius:10px;
+}
+
+img{
+    width:300px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+
+<h2>Quét mã QR để thanh toán</h2>
+
+<img src="qr.png">
+<p><b>Ngân hàng:</b> MB Bank</p>
+<p><b>STK:</b> 111111032006</p>
+<p><b>Chủ TK:</b> FASHION SHOP</p>
+
+<button onclick="finishPayment()">
+Tôi đã chuyển khoản
+</button>
+
+</div>
+
+<script>
+
+function finishPayment(){
+
+    alert("Xác nhận đơn hàng thành công!");
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Đơn hàng của tôi</title>
+</head>
+<body>
+
+<h1>📦 Đơn hàng của tôi</h1>
+
+<div id="orderList"></div>
+
+<script>
+let orders =
+JSON.parse(localStorage.getItem("orders")) || [];
+
+let html = "";
+
+orders.forEach((order,index)=>{
+
+    html += `
+    <div style="border:1px solid #ccc;
+                padding:10px;
+                margin:10px;">
+        <h3>Đơn hàng #${index+1}</h3>
+        <p>Ngày: ${order.date}</p>
+        <p>Tổng tiền:
+        ${Number(order.total).toLocaleString()}đ</p>
+    </div>
+    `;
+});
+
+document.getElementById("orderList").innerHTML =
+html || "Chưa có đơn hàng nào";
+</script>
+
+</body>
+</html>
