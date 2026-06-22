@@ -1,88 +1,73 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>Thanh toán</title>
-<style>
-body{
-    font-family:Arial;
-    background:#f5f5f5;
-    padding:20px;
-}
-
-.box{
-    max-width:600px;
-    margin:auto;
-    background:white;
-    padding:20px;
-    border-radius:10px;
-}
-.product-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px;
-    border:1px solid #ddd;
-    margin-bottom:10px;
-    border-radius:8px;
-    background:#fafafa;
-}
-select,input,button{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Thanh toán</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .box {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="box">
+    <div class="box">
 
-<h2>Thanh toán đơn hàng</h2>
+        <h2>Thanh toán đơn hàng</h2>
 
-<h3>Sản phẩm đã chọn</h3>
+        <h3>Sản phẩm đã chọn</h3>
 
-<div id="selectedProducts"></div>
+        <div id="selectedProducts"></div>
 
-<p id="total"></p>
+        <p id="total"></p>
 
-<p id="wallet"></p>
+        <input type="text" id="customerName" placeholder="Họ tên">
+        <input type="text" id="customerPhone" placeholder="Số điện thoại">
+        <input type="text" id="customerAddress" placeholder="Địa chỉ">
 
-<input type="number"
-id="depositAmount"
-placeholder="Nhập số tiền cần nạp">
+        <select id="paymentMethod">
 
-<button onclick="depositMoney()">
-💰 Nạp tiền vào ví
-</button>
+            <option value="BANK">
+                Chuyển khoản ngân hàng
+            </option>
 
-<input type="text" id="customerName" placeholder="Họ tên">
-<input type="text" id="customerPhone" placeholder="Số điện thoại">
-<input type="text" id="customerAddress" placeholder="Địa chỉ">
+            <option value="COD">
+                Thanh toán khi nhận hàng
+            </option>
 
-<select id="paymentMethod">
+        </select>
 
-<option value="WALLET">
-Ví Fashion Shop
-</option>
+        <button onclick="pay()">
+            Đặt hàng
+        </button>
 
-<option value="BANK">
-Chuyển khoản ngân hàng
-</option>
+    </div>
 
-<option value="COD">
-Thanh toán khi nhận hàng
-</option>
-
-</select>
-
-<button onclick="pay()">
-Đặt hàng
-</button>
-
-</div>
-
-<script>
+    <script>
 let products =
 JSON.parse(localStorage.getItem("cartItems")) || [];
 
@@ -101,17 +86,12 @@ products.forEach(item=>{
 
 document.getElementById("selectedProducts").innerHTML =
 html;
+
 let total =
 Number(localStorage.getItem("checkoutTotal"));
 
 document.getElementById("total").innerHTML =
 "Tổng tiền: " + total.toLocaleString() + "đ";
-
-let wallet =
-Number(localStorage.getItem("walletBalance") || 0);
-
-document.getElementById("wallet").innerHTML =
-"Số dư ví: " + wallet.toLocaleString() + "đ";
 
 document.getElementById("customerName").value =
 localStorage.getItem("username") || "";
@@ -121,32 +101,21 @@ localStorage.getItem("phone") || "";
 
 document.getElementById("customerAddress").value =
 localStorage.getItem("address") || "";
-function depositMoney(){
-let amount =
-Number(document.getElementById("depositAmount").value);
 
-if(amount <= 0){
-    alert("Nhập số tiền hợp lệ!");
-    return;
-}
-
-let wallet =
-Number(localStorage.getItem("walletBalance") || 0);
-
-wallet += amount;
-
-localStorage.setItem("walletBalance", wallet);
-
-document.getElementById("wallet").innerHTML =
-"Số dư ví: " + wallet.toLocaleString() + "đ";
-
-alert("Nạp tiền thành công!");
-
-document.getElementById("depositAmount").value = "";
-}
 async function pay(){
 
+   const prefix =
+   Math.random() < 0.5 ? "TN" : "CNC";
+
+   const orderId =
+   prefix +
+   Date.now().toString().slice(-8) +
+   Math.floor(1000 + Math.random() * 9000);
+
 let order = {
+
+    orderId: orderId,
+
     customerName:
     document.getElementById("customerName").value,
 
@@ -157,7 +126,6 @@ let order = {
     document.getElementById("customerAddress").value,
 
     products: products,
-
     total: total,
 
     paymentMethod:
@@ -171,7 +139,6 @@ await saveOrder(order);
 
 let orders =
 JSON.parse(localStorage.getItem("orders")) || [];
-
 orders.push(order);
 
 localStorage.setItem(
@@ -182,30 +149,7 @@ localStorage.setItem(
 let method =
 document.getElementById("paymentMethod").value;
 
-if(method === "WALLET"){
-
-    let balance =
-    Number(localStorage.getItem("walletBalance") || 0);
-
-    if(balance < total){
-        alert("Số dư ví không đủ!");
-        return;
-    }
-
-    balance -= total;
-
-    localStorage.setItem("walletBalance", balance);
-
-    alert("Thanh toán bằng ví thành công!");
-
-    localStorage.removeItem("cartItems");
-    localStorage.removeItem("checkoutTotal");
-
-    window.location.href = "index.html";
-
-}
-
-else if(method === "BANK"){
+if(method === "BANK"){
     window.location.href = "bank.html";
 }
 else{
@@ -215,10 +159,10 @@ else{
     localStorage.removeItem("cartItems");
     localStorage.removeItem("checkoutTotal");
     window.location.href = "index.html";
-        }
-         }
-</script>
-<script type="module">
+    }
+     }
+    </script>
+    <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
 import {
@@ -226,6 +170,12 @@ import {
   collection,
   addDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCwV5duPecj4b-CJo1XaAJflB1Yr-hyG14",
@@ -243,6 +193,6 @@ window.saveOrder = async function(order){
     await addDoc(collection(db, "orders"), order);
 };
 
-</script>
+    </script>
 </body>
 </html>
