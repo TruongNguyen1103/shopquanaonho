@@ -1,0 +1,10 @@
+{
+  "name": "fashion-shop",
+  "version": "1.0.0",
+  "description": "Fashion Shop - Unit Test (Automation Test)",
+  "scripts": {
+    "test": "node run-tests.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
