@@ -232,6 +232,47 @@
             padding-bottom: 10px;
         }
 
+        /* ===== CHAT WIDGET ===== */
+
+        .chat-float-btn {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #1f2a44;
+            color: white;
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 500;
+            padding: 0;
+            transition: 0.3s;
+        }
+
+            .chat-float-btn:hover {
+                background: #32456b;
+                transform: scale(1.08);
+            }
+
+        .contact-box {
+            width: 350px;
+        }
+
+            .contact-box textarea {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                min-height: 90px;
+                resize: vertical;
+                font-family: Arial;
+            }
+
         /* ===== FOOTER ===== */
 
         footer {
@@ -328,7 +369,7 @@
     <nav>
         <a href="#">Trang chủ</a>
         <a href="#">Sản phẩm</a>
-        <a href="#">Liên hệ</a>
+        <a href="#" onclick="openContact();return false;">Liên hệ</a>
     </nav>
 
     <div class="banner">
@@ -880,6 +921,34 @@
 
     </div>
 
+    <!-- ===== NHẮN TIN VỚI SHOP ===== -->
+
+    <button class="chat-float-btn" onclick="openContact()" title="Nhắn tin với shop">
+        💬
+    </button>
+
+    <div class="modal" id="contactModal">
+
+        <div class="modal-box contact-box">
+
+            <span class="close" onclick="closeContact()">×</span>
+
+            <h2>💬 Nhắn tin với Shop</h2>
+
+            <input type="text" id="contactName" placeholder="Họ tên">
+
+            <input type="text" id="contactPhone" placeholder="Số điện thoại / Email">
+
+            <textarea id="contactMessage" placeholder="Nội dung tin nhắn..."></textarea>
+
+            <button style="width:100%;" onclick="sendMessage()">
+                Gửi tin nhắn
+            </button>
+
+        </div>
+
+    </div>
+
     <!-- ===== CART ===== -->
     <div class="cart-box">
 
@@ -921,6 +990,54 @@ function checkOrders(){
         return;
     }
     window.location.href = "orders.html";
+}
+
+/* ===== NHẮN TIN VỚI SHOP ===== */
+
+function openContact(){
+    document.getElementById("contactName").value =
+        localStorage.getItem("currentUser") || localStorage.getItem("username") || "";
+    document.getElementById("contactPhone").value =
+        localStorage.getItem("phone") || "";
+    document.getElementById("contactModal").style.display = "flex";
+}
+
+function closeContact(){
+    document.getElementById("contactModal").style.display = "none";
+}
+
+async function sendMessage(){
+    let name = document.getElementById("contactName").value.trim();
+    let contact = document.getElementById("contactPhone").value.trim();
+    let content = document.getElementById("contactMessage").value.trim();
+
+    if(name === "" || content === ""){
+        alert("Vui lòng nhập tên và nội dung tin nhắn!");
+        return;
+    }
+
+    let message = {
+        name: name,
+        contact: contact,
+        content: content,
+        createdAt: new Date().toLocaleString()
+    };
+
+    let messages = JSON.parse(localStorage.getItem("shopMessages")) || [];
+    messages.push(message);
+    localStorage.setItem("shopMessages", JSON.stringify(messages));
+
+    if(typeof window.saveMessageToServer === "function"){
+        try{
+            await window.saveMessageToServer(message);
+        }catch(e){
+            console.error("Không lưu được lên server:", e);
+        }
+    }
+
+    alert("Đã gửi tin nhắn! Shop sẽ phản hồi sớm nhất có thể 💌");
+    document.getElementById("contactMessage").value = "";
+    closeContact();
 }
 
 /* ===== LOGIN ===== */
@@ -1235,6 +1352,12 @@ import {
   signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCwV5duPecj4b-CJo1XaAJflB1Yr-hyG14",
   authDomain: "fashionshop-feb45.firebaseapp.com",
@@ -1246,7 +1369,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
+
+window.saveMessageToServer = async function (message) {
+  await addDoc(collection(db, "messages"), message);
+};
 
 window.googleLogin = async function () {
   try {
