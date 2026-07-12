@@ -16,6 +16,46 @@
             background: #f5f5f5;
         }
 
+        /* ===== INTRO ===== */
+        #introPage {
+            width: 100%;
+            height: 100vh;
+            background: url("thietkeweb-2.png");
+            background-size: cover;
+            background-position: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+
+        .overlay {
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .enter-btn {
+            margin-top: 320px;
+            padding: 15px 40px;
+            font-size: 22px;
+            border: none;
+            border-radius: 50px;
+            background: #1f2a44;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+            .enter-btn:hover {
+                background: #32456b;
+                transform: scale(1.05);
+            }
+
         /* ===== HEADER ===== */
 
         header {
@@ -79,7 +119,6 @@
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             transition: 0.3s;
-            cursor: pointer;
         }
 
             .card:hover {
@@ -172,69 +211,6 @@
             font-size: 20px;
         }
 
-        /* ===== PRODUCT DETAIL ===== */
-
-        .detail-box {
-            width: 420px;
-            max-width: 92%;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-
-            .detail-box h2 {
-                text-align: left;
-                margin-bottom: 5px;
-            }
-
-        .detail-image {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .size-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10px 0;
-            font-size: 14px;
-        }
-
-            .size-table th, .size-table td {
-                border: 1px solid #ddd;
-                padding: 6px;
-                text-align: center;
-            }
-
-            .size-table th {
-                background: #111;
-                color: white;
-            }
-
-        .size-suggest {
-            display: flex;
-            gap: 8px;
-        }
-
-            .size-suggest input {
-                width: auto;
-                flex: 1;
-            }
-
-            .size-suggest button {
-                width: auto;
-                white-space: nowrap;
-            }
-
-        #detailSize {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
         /* ===== CART ===== */
 
         .cart-box {
@@ -285,11 +261,29 @@
                 left: 5%;
                 right: 5%;
             }
+
+            .enter-btn {
+                margin-top: 400px;
+            }
         }
     </style>
 </head>
 
 <body>
+
+    <!-- ===== INTRO ===== -->
+
+    <div id="introPage">
+
+        <div class="overlay">
+
+            <button class="enter-btn" onclick="enterShop()">
+                VÀO SHOP
+            </button>
+
+        </div>
+
+    </div>
 
     <!-- ===== WEBSITE ===== -->
 
@@ -302,7 +296,7 @@
         <div id="walletText"></div>
         <div class="top-buttons">
 
-            <button onclick="window.location.href='orders.html'">
+            <button onclick="checkOrders()">
                 📦 Đơn hàng
             </button>
 
@@ -671,21 +665,22 @@
             <img src="https://lados.vn/wp-content/uploads/2025/02/ao-thun-ba-lo-nam-dep-gia-tot-lados-ld9203-600x600.jpg">
             <div class="card-content">
                 <h3>Áo Ba Lỗ Nam</h3>
-                <p class="price">89.000đ</p>
-                <div class="product-buttons">
-                    <button onclick="addToCart('Áo Ba Lỗ Nam',89000)">
-                        Thêm vào giỏ
-                    </button>
-                    <button onclick="buyNow('Áo Ba Lỗ Nam',89000)">
-                        Mua ngay
-                    </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
-                </div>
+                <p class="price">
+                    89.000đ
+                    <div class="product-buttons">
+                        <button onclick="addToCart('Áo Ba Lỗ Nam',89000)">
+                            Thêm vào giỏ
+                        </button>
+                        <button onclick="buyNow('Áo Ba Lỗ Nam',89000)">
+                            Mua ngay
+                        </button>
+                        <button onclick="hideProduct(this)">
+                            Ẩn hàng
+                        </button>
+                    </div>
+                    <div class="admin-buttons">
+                        <button onclick="deleteProduct(this)">Xóa</button>
+                    </div>
             </div>
         </div>
 
@@ -885,62 +880,6 @@
 
     </div>
 
-    <!-- ===== PRODUCT DETAIL ===== -->
-
-    <div class="modal" id="detailModal">
-
-        <div class="modal-box detail-box">
-
-            <span class="close" onclick="closeDetail()">×</span>
-
-            <img id="detailImage" class="detail-image">
-
-            <h2 id="detailName"></h2>
-            <p class="price" id="detailPrice"></p>
-
-            <h3>📏 Bảng size tham khảo</h3>
-            <table class="size-table" id="sizeTable">
-                <thead>
-                    <tr>
-                        <th>Size</th>
-                        <th>Chiều cao (cm)</th>
-                        <th>Cân nặng (kg)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr data-size="S"><td>S</td><td>150 - 160</td><td>40 - 50</td></tr>
-                    <tr data-size="M"><td>M</td><td>160 - 168</td><td>50 - 60</td></tr>
-                    <tr data-size="L"><td>L</td><td>168 - 175</td><td>60 - 70</td></tr>
-                    <tr data-size="XL"><td>XL</td><td>175 - 185</td><td>70 - 85</td></tr>
-                </tbody>
-            </table>
-
-            <div class="size-suggest">
-                <input type="number" id="detailHeight" placeholder="Chiều cao (cm)">
-                <input type="number" id="detailWeight" placeholder="Cân nặng (kg)">
-                <button type="button" onclick="suggestSize()">Gợi ý size</button>
-            </div>
-            <p id="detailSizeResult" style="font-size:14px;margin-top:8px;min-height:18px;"></p>
-
-            <div style="margin-top:10px;">
-                <label for="detailSize"><b>Chọn size:</b></label>
-                <select id="detailSize">
-                    <option value="S">S</option>
-                    <option value="M" selected>M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                </select>
-            </div>
-
-            <div class="product-buttons" style="margin-top:15px;">
-                <button onclick="detailAddToCart()">Thêm vào giỏ</button>
-                <button onclick="detailBuyNow()">Mua ngay</button>
-            </div>
-
-        </div>
-
-    </div>
-
     <!-- ===== CART ===== -->
     <div class="cart-box">
 
@@ -964,6 +903,26 @@
     </footer>
     <script>
 
+/* ===== INTRO ===== */
+
+function enterShop(){
+
+    document.getElementById("introPage").style.display = "none";
+
+}
+
+/* ===== ĐƠN HÀNG (yêu cầu đăng nhập) ===== */
+
+function checkOrders(){
+    let currentUser = localStorage.getItem("currentUser");
+    if(!currentUser){
+        alert("Vui lòng đăng nhập để xem đơn hàng!");
+        openLogin();
+        return;
+    }
+    window.location.href = "orders.html";
+}
+
 /* ===== LOGIN ===== */
 
 function openLogin(){
@@ -977,7 +936,6 @@ function closeLogin(){
  function login(){
     let user = document.getElementById("loginUser").value;
     let pass = document.getElementById("loginPass").value;
-    localStorage.setItem("currentUser", user);
     let savedUser = localStorage.getItem("username");
     let savedPass = localStorage.getItem("password");
 
@@ -1012,6 +970,7 @@ function closeLogin(){
         Number(wallet).toLocaleString() + "đ";
         alert("Đăng nhập thành công!");
         closeLogin();
+    document.getElementById("introPage").style.display = "none";
     }else{
         alert("Sai tài khoản hoặc mật khẩu!");
 
@@ -1065,6 +1024,8 @@ localStorage.setItem("address", address);
 localStorage.setItem("walletBalance", 0);
 alert("Đăng ký thành công!");
 closeRegister();
+
+document.getElementById("introPage").style.display = "none";
 }
 
 /* ===== ADMIN ===== */
@@ -1101,19 +1062,11 @@ function addProduct(){
 
             <h3>${name}</h3>
 
-            <p class="price">${Number(price).toLocaleString("vi-VN")}đ</p>
+            <p class="price">${price}đ</p>
 
-            <div class="product-buttons">
-                <button onclick="addToCart('${name}',${price})">
-                    Thêm vào giỏ
-                </button>
-                <button onclick="buyNow('${name}',${price})">
-                    Mua ngay
-                </button>
-                <button onclick="hideProduct(this)">
-                    Ẩn hàng
-                </button>
-            </div>
+            <button onclick="addToCart('${name}',${price})">
+                Mua ngay
+            </button>
 
             <div class="admin-buttons">
 
@@ -1146,99 +1099,6 @@ function deleteProduct(button){
     alert("Đã xóa sản phẩm!");
 
 }
-
-/* ===== PRODUCT DETAIL ===== */
-
-let currentDetailProduct = null;
-
-const SIZE_CHART = [
-    { code: "S",  minH: 150, maxH: 160, minW: 40, maxW: 50 },
-    { code: "M",  minH: 160, maxH: 168, minW: 50, maxW: 60 },
-    { code: "L",  minH: 168, maxH: 175, minW: 60, maxW: 70 },
-    { code: "XL", minH: 175, maxH: 185, minW: 70, maxW: 85 }
-];
-
-function openDetail(card){
-
-    const imgSrc = card.querySelector("img").src;
-    const name = card.querySelector("h3").innerText.trim();
-    const priceText = card.querySelector(".price").innerText;
-    const price = parseInt(priceText.replace(/[^\d]/g, ""), 10) || 0;
-
-    currentDetailProduct = { name: name, price: price };
-
-    document.getElementById("detailImage").src = imgSrc;
-    document.getElementById("detailName").innerText = name;
-    document.getElementById("detailPrice").innerText =
-        Number(price).toLocaleString("vi-VN") + "đ";
-
-    document.getElementById("detailHeight").value = "";
-    document.getElementById("detailWeight").value = "";
-    document.getElementById("detailSizeResult").innerText = "";
-    document.getElementById("detailSize").value = "M";
-    highlightSizeRow(null);
-
-    document.getElementById("detailModal").style.display = "flex";
-}
-
-function closeDetail(){
-    document.getElementById("detailModal").style.display = "none";
-}
-
-function suggestSize(){
-
-    const height = Number(document.getElementById("detailHeight").value);
-    const weight = Number(document.getElementById("detailWeight").value);
-    const resultEl = document.getElementById("detailSizeResult");
-
-    if(!height || !weight){
-        resultEl.style.color = "red";
-        resultEl.innerText = "Vui lòng nhập đủ chiều cao và cân nặng!";
-        highlightSizeRow(null);
-        return;
-    }
-
-    let matched = SIZE_CHART.find(s => weight >= s.minW && weight <= s.maxW);
-
-    if(!matched){
-        matched = weight < SIZE_CHART[0].minW
-            ? SIZE_CHART[0]
-            : SIZE_CHART[SIZE_CHART.length - 1];
-    }
-
-    document.getElementById("detailSize").value = matched.code;
-    highlightSizeRow(matched.code);
-
-    resultEl.style.color = "green";
-    resultEl.innerText =
-        `Gợi ý: Size ${matched.code} (phù hợp cao ${matched.minH}-${matched.maxH}cm, nặng ${matched.minW}-${matched.maxW}kg)`;
-}
-
-function highlightSizeRow(code){
-    document.querySelectorAll("#sizeTable tbody tr").forEach(function(row){
-        row.style.background = (row.dataset.size === code) ? "#fff3cd" : "";
-    });
-}
-
-function detailAddToCart(){
-    if(!currentDetailProduct) return;
-    const size = document.getElementById("detailSize").value;
-    addToCart(currentDetailProduct.name + " (Size " + size + ")", currentDetailProduct.price);
-}
-
-function detailBuyNow(){
-    if(!currentDetailProduct) return;
-    const size = document.getElementById("detailSize").value;
-    buyNow(currentDetailProduct.name + " (Size " + size + ")", currentDetailProduct.price);
-}
-
-/* Mở chi tiết khi bấm vào sản phẩm, trừ khi bấm vào các nút trong card */
-document.getElementById("productList").addEventListener("click", function(e){
-    const card = e.target.closest(".card");
-    if(!card) return;
-    if(e.target.closest(".product-buttons") || e.target.closest(".admin-buttons")) return;
-    openDetail(card);
-});
 
 /* ===== CART ===== */
 
@@ -1359,6 +1219,7 @@ window.onload = function(){
     document.getElementById("googleBtn").style.display = "none";
         let wallet =
     localStorage.getItem("walletBalance") || 0;
+        document.getElementById("walletText").innerHTML =
        "Số dư ví: " +
         Number(wallet).toLocaleString() + "đ";
     }

@@ -9,6 +9,14 @@
     <!--<h1>📦 Đơn hàng của tôi</h1>-->
     <div id="orderList"></div>
     <script>
+// ===== KIỂM TRA ĐĂNG NHẬP =====
+let currentUser = localStorage.getItem("currentUser");
+
+if (!currentUser) {
+    alert("Vui lòng đăng nhập để xem đơn hàng!");
+    window.location.href = "index.html";
+} else {
+
 let orders =
 JSON.parse(localStorage.getItem("orders")) || [];
 
@@ -31,6 +39,8 @@ orders.forEach((order,index)=>{
 
 document.getElementById("orderList").innerHTML =
 html || "Chưa có đơn hàng nào";
+
+}
     </script>
 
 </body>
