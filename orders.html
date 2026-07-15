@@ -17,28 +17,59 @@ if (!currentUser) {
     window.location.href = "index.html";
 } else {
 
-let orders =
+let allOrders =
 JSON.parse(localStorage.getItem("orders")) || [];
 
-let html = "";
+// Chỉ lấy đơn hàng thuộc về tài khoản đang đăng nhập.
+// Đơn hàng cũ (tạo trước khi có trường "owner") sẽ không hiện ra nữa
+// vì không xác định được là của ai.
+let orders = allOrders.filter(order => order.owner === currentUser);
 
-orders.forEach((order,index)=>{
+function renderOrders(){
+    let html = "";
 
-    html += `
-    <div style="border:1px solid #ccc;
-                padding:10px;
-                margin:10px;">
-        <h3>Đơn hàng #${index+1}</h3>
-        <p>Mã đơn: ${order.orderId}</p>
-        <p>Ngày: ${order.createdAt}</p>
-        <p>Tổng tiền:
-        ${Number(order.total).toLocaleString()}đ</p>
-    </div>
-    `;
-});
+    orders.forEach((order, index)=>{
 
-document.getElementById("orderList").innerHTML =
-html || "Chưa có đơn hàng nào";
+        html += `
+        <div style="border:1px solid #ccc;
+                    padding:10px;
+                    margin:10px;">
+            <h3>Đơn hàng #${index+1}</h3>
+            <p>Mã đơn: ${order.orderId}</p>
+            <p>Ngày: ${order.createdAt}</p>
+            <p>Tổng tiền:
+            ${Number(order.total).toLocaleString()}đ</p>
+            <button onclick="deleteOrder(${index})"
+                    style="background:red;color:white;border:none;
+                           padding:8px 12px;border-radius:5px;cursor:pointer;">
+                Xóa đơn hàng
+            </button>
+        </div>
+        `;
+    });
+
+    document.getElementById("orderList").innerHTML =
+    html || "Chưa có đơn hàng nào";
+}
+
+function deleteOrder(index){
+    if(!confirm("Bạn có chắc muốn xóa đơn hàng này?")) return;
+
+    // Xác định đúng đơn hàng cần xóa trong mảng gốc (allOrders)
+    // bằng cách so khớp orderId, tránh xóa nhầm đơn của người khác.
+    const target = orders[index];
+    const realIndex = allOrders.findIndex(o => o.orderId === target.orderId);
+
+    if(realIndex !== -1){
+        allOrders.splice(realIndex, 1);
+        localStorage.setItem("orders", JSON.stringify(allOrders));
+    }
+
+    orders.splice(index, 1);
+    renderOrders();
+}
+
+renderOrders();
 
 }
     </script>

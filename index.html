@@ -154,12 +154,6 @@
                 background: #444;
             }
 
-        .admin-buttons {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
         .product-buttons {
             display: flex;
             gap: 5px;
@@ -259,18 +253,129 @@
             }
 
         .contact-box {
-            width: 350px;
+            width: 380px;
+            max-width: 90vw;
+            padding: 0 !important;
+            overflow: hidden;
         }
 
-            .contact-box textarea {
-                width: 100%;
-                padding: 10px;
-                margin: 10px 0;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                min-height: 90px;
-                resize: vertical;
-                font-family: Arial;
+        #contactInfoStep {
+            padding: 25px;
+        }
+
+        /* ===== CHAT WIDGET (giống giao diện chat trong ứng dụng) ===== */
+
+        #chatStep {
+            display: none;
+            flex-direction: column;
+            height: 520px;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #222, #000);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+            .chat-header .chat-back {
+                cursor: pointer;
+                font-size: 20px;
+                line-height: 1;
+            }
+
+            .chat-header .chat-title {
+                font-weight: bold;
+                font-size: 17px;
+                letter-spacing: 0.5px;
+            }
+
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+            .chat-bubble.user {
+                align-self: flex-end;
+                background: #1a1a1a;
+                color: white;
+                border-bottom-right-radius: 4px;
+            }
+
+            .chat-bubble.shop {
+                align-self: flex-start;
+                background: white;
+                color: #333;
+                border: 1px solid #ddd;
+                border-bottom-left-radius: 4px;
+            }
+
+        .chat-time {
+            font-size: 11px;
+            margin-top: 4px;
+            opacity: 0.75;
+        }
+
+        .chat-note {
+            align-self: center;
+            max-width: 90%;
+            background: #fff8e1;
+            border: 1px solid #ffe28a;
+            color: #7a5b00;
+            font-size: 12.5px;
+            line-height: 1.5;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .chat-input-bar {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: white;
+            border-top: 1px solid #eee;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+            .chat-input-bar input {
+                flex: 1;
+                border: 1px solid #ddd;
+                border-radius: 20px;
+                padding: 10px 15px;
+                margin: 0;
+                font-size: 14px;
+            }
+
+            .chat-input-bar button {
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                border-radius: 50%;
+                background: #1a1a1a;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                flex-shrink: 0;
             }
 
         /* ===== FOOTER ===== */
@@ -393,12 +498,6 @@
                     <button onclick="buyNow('Áo Hoodie Mùa Đông',300000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -416,12 +515,6 @@
                     <button onclick="buyNow('Áo Khoác Len',320000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -439,12 +532,6 @@
                     <button onclick="buyNow('Áo Sweater Basic',250000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -462,12 +549,6 @@
                     <button onclick="buyNow('Set Vest Thời Trang',1250000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -485,12 +566,6 @@
                     <button onclick="buyNow('Váy Mùa Hè',270000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -508,12 +583,6 @@
                     <button onclick="buyNow('Áo Thun Basic',190000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -531,12 +600,6 @@
                     <button onclick="buyNow('Quần Jeans Form Rộng',299000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -554,12 +617,6 @@
                     <button onclick="buyNow('Đầm Tiểu Thư',520000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -577,12 +634,6 @@
                     <button onclick="buyNow('Áo Polo Nam',149000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -600,12 +651,6 @@
                     <button onclick="buyNow('Áo Sơ Mi Trắng',159000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -623,12 +668,6 @@
                     <button onclick="buyNow('Áo Sơ Mi Kẻ Sọc',229000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -646,12 +685,6 @@
                     <button onclick="buyNow('Áo Thun Oversize',129000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -669,12 +702,6 @@
                     <button onclick="buyNow('Áo Thun In Hình',149000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -692,12 +719,6 @@
                     <button onclick="buyNow('Áo Hai Dây',69000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -715,12 +736,6 @@
                         <button onclick="buyNow('Áo Ba Lỗ Nam',89000)">
                             Mua ngay
                         </button>
-                        <button onclick="hideProduct(this)">
-                            Ẩn hàng
-                        </button>
-                    </div>
-                    <div class="admin-buttons">
-                        <button onclick="deleteProduct(this)">Xóa</button>
                     </div>
             </div>
         </div>
@@ -738,12 +753,6 @@
                     <button onclick="buyNow('Áo Khoác Gió',349000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -761,12 +770,6 @@
                     <button onclick="buyNow('Áo Len Cổ Lọ',199000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -784,12 +787,6 @@
                     <button onclick="buyNow('Quần Tây Nam',159000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -807,12 +804,6 @@
                     <button onclick="buyNow('Mũ Bucket',59000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -830,12 +821,6 @@
                     <button onclick="buyNow('Tất Nam nữ',20000)">
                         Mua ngay
                     </button>
-                    <button onclick="hideProduct(this)">
-                        Ẩn hàng
-                    </button>
-                </div>
-                <div class="admin-buttons">
-                    <button onclick="deleteProduct(this)">Xóa</button>
                 </div>
             </div>
         </div>
@@ -931,19 +916,40 @@
 
         <div class="modal-box contact-box">
 
-            <span class="close" onclick="closeContact()">×</span>
+            <!-- Bước 1: nhập thông tin liên hệ (chỉ hỏi 1 lần) -->
+            <div id="contactInfoStep">
 
-            <h2>💬 Nhắn tin với Shop</h2>
+                <span class="close" onclick="closeContact()">×</span>
 
-            <input type="text" id="contactName" placeholder="Họ tên">
+                <h2>💬 Nhắn tin với Shop</h2>
 
-            <input type="text" id="contactPhone" placeholder="Số điện thoại / Email">
+                <input type="text" id="contactName" placeholder="Họ tên">
 
-            <textarea id="contactMessage" placeholder="Nội dung tin nhắn..."></textarea>
+                <input type="text" id="contactPhone" placeholder="Số điện thoại / Email">
 
-            <button style="width:100%;" onclick="sendMessage()">
-                Gửi tin nhắn
-            </button>
+                <button style="width:100%;" onclick="startChat()">
+                    Bắt đầu trò chuyện
+                </button>
+
+            </div>
+
+            <!-- Bước 2: khung chat dạng bong bóng -->
+            <div id="chatStep">
+
+                <div class="chat-header">
+                    <span class="chat-back" onclick="closeContact()">←</span>
+                    <span class="chat-title">FASHION SHOP</span>
+                </div>
+
+                <div class="chat-body" id="chatBody"></div>
+
+                <div class="chat-input-bar">
+                    <input type="text" id="chatInput" placeholder="Soạn tin..."
+                           onkeypress="if(event.key==='Enter') sendChatMessage()">
+                    <button onclick="sendChatMessage()">➤</button>
+                </div>
+
+            </div>
 
         </div>
 
@@ -992,39 +998,119 @@ function checkOrders(){
     window.location.href = "orders.html";
 }
 
-/* ===== NHẮN TIN VỚI SHOP ===== */
+/* ===== NHẮN TIN VỚI SHOP (giao diện chat dạng bong bóng) ===== */
 
 function openContact(){
+    document.getElementById("contactModal").style.display = "flex";
+
+    let savedName = localStorage.getItem("contactName");
+    let savedPhone = localStorage.getItem("contactPhone");
+
+    // Đã có thông tin liên hệ từ trước → vào thẳng khung chat
+    if(savedName && savedPhone){
+        showChatStep();
+        return;
+    }
+
+    // Chưa có → hiện bước nhập thông tin, có gợi ý sẵn từ tài khoản đang đăng nhập (nếu có)
+    document.getElementById("contactInfoStep").style.display = "block";
+    document.getElementById("chatStep").style.display = "none";
+
     document.getElementById("contactName").value =
         localStorage.getItem("currentUser") || localStorage.getItem("username") || "";
     document.getElementById("contactPhone").value =
         localStorage.getItem("phone") || "";
-    document.getElementById("contactModal").style.display = "flex";
 }
 
 function closeContact(){
     document.getElementById("contactModal").style.display = "none";
 }
 
-async function sendMessage(){
+function startChat(){
     let name = document.getElementById("contactName").value.trim();
-    let contact = document.getElementById("contactPhone").value.trim();
-    let content = document.getElementById("contactMessage").value.trim();
+    let phone = document.getElementById("contactPhone").value.trim();
 
-    if(name === "" || content === ""){
-        alert("Vui lòng nhập tên và nội dung tin nhắn!");
+    if(name === "" || phone === ""){
+        alert("Vui lòng nhập họ tên và số điện thoại/email!");
         return;
     }
+
+    localStorage.setItem("contactName", name);
+    localStorage.setItem("contactPhone", phone);
+
+    showChatStep();
+}
+
+function showChatStep(){
+    document.getElementById("contactInfoStep").style.display = "none";
+    document.getElementById("chatStep").style.display = "flex";
+    renderChatMessages();
+    document.getElementById("chatInput").focus();
+}
+
+function escapeHtml(str){
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+function renderChatMessages(){
+    let name = localStorage.getItem("contactName");
+    let messages = JSON.parse(localStorage.getItem("shopMessages")) || [];
+
+    // Chỉ hiện tin nhắn của đúng người đang chat (theo tên đã lưu)
+    let myMessages = messages.filter(m => m.name === name);
+
+    let html = `<div class="chat-bubble shop">Xin chào ${escapeHtml(name)}! Shop có thể giúp gì cho bạn? 😊</div>`;
+
+    myMessages.forEach(m => {
+        if(m.type === "auto"){
+            html += `<div class="chat-note">${escapeHtml(m.content)}</div>`;
+        } else {
+            html += `
+            <div class="chat-bubble user">
+                ${escapeHtml(m.content)}
+                <div class="chat-time">${m.createdAt}</div>
+            </div>`;
+        }
+    });
+
+    let chatBody = document.getElementById("chatBody");
+    chatBody.innerHTML = html;
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+async function sendChatMessage(){
+    let input = document.getElementById("chatInput");
+    let content = input.value.trim();
+
+    if(content === "") return;
+
+    let name = localStorage.getItem("contactName");
+    let contact = localStorage.getItem("contactPhone");
 
     let message = {
         name: name,
         contact: contact,
         content: content,
-        createdAt: new Date().toLocaleString()
+        createdAt: new Date().toLocaleString(),
+        type: "user"
     };
 
     let messages = JSON.parse(localStorage.getItem("shopMessages")) || [];
     messages.push(message);
+
+    // Tin nhắn tự động: shop chưa xem, báo cho khách biết sẽ phản hồi sau
+    let autoNote = {
+        name: name,
+        contact: contact,
+        content: "Cảm ơn bạn đã nhắn tin cho Fashion Shop. Hiện tại nhân viên chưa xem tin nhắn này, chúng tôi sẽ phản hồi trong thời gian sớm nhất. Nếu cần hỗ trợ gấp, vui lòng gọi hotline 1900 0002.",
+        createdAt: new Date().toLocaleString(),
+        type: "auto"
+    };
+    messages.push(autoNote);
+
     localStorage.setItem("shopMessages", JSON.stringify(messages));
 
     if(typeof window.saveMessageToServer === "function"){
@@ -1035,9 +1121,8 @@ async function sendMessage(){
         }
     }
 
-    alert("Đã gửi tin nhắn! Shop sẽ phản hồi sớm nhất có thể 💌");
-    document.getElementById("contactMessage").value = "";
-    closeContact();
+    input.value = "";
+    renderChatMessages();
 }
 
 /* ===== LOGIN ===== */
@@ -1065,6 +1150,7 @@ function closeLogin(){
     document.getElementById("loginBtn").style.display = "none";
     document.getElementById("registerBtn").style.display = "none";
     document.getElementById("logoutBtn").style.display = "inline-block";
+    document.getElementById("googleBtn").style.display = "none";
         alert("Đăng nhập Admin thành công!");
         closeLogin();
         return;
@@ -1185,14 +1271,6 @@ function addProduct(){
                 Mua ngay
             </button>
 
-            <div class="admin-buttons">
-
-                <button onclick="deleteProduct(this)">
-                    Xóa
-                </button>
-
-            </div>
-
         </div>
 
     </div>
@@ -1204,16 +1282,6 @@ function addProduct(){
     alert("Thêm sản phẩm thành công!");
 
     closeAdmin();
-
-}
-
-/* ===== DELETE ===== */
-
-function deleteProduct(button){
-
-    button.closest(".card").remove();
-
-    alert("Đã xóa sản phẩm!");
 
 }
 
@@ -1309,9 +1377,6 @@ function buyNow(name, price){
 
     window.location.href = "checkout.html";
 }
-function hideProduct(button){
-    button.closest(".card").style.display = "none";
-}
 
 function logout(){
 
@@ -1325,20 +1390,31 @@ function logout(){
 window.onload = function(){
     let savedUser =
     localStorage.getItem("currentUser");
+
     if(savedUser){
         isLoggedIn = true;
-    document.getElementById("userText").innerHTML =
-        "Xin chào, " + savedUser;
 
-    document.getElementById("loginBtn").style.display = "none";
-    document.getElementById("registerBtn").style.display = "none";
-    document.getElementById("logoutBtn").style.display = "inline-block";
-    document.getElementById("googleBtn").style.display = "none";
-        let wallet =
-    localStorage.getItem("walletBalance") || 0;
-        document.getElementById("walletText").innerHTML =
-       "Số dư ví: " +
-        Number(wallet).toLocaleString() + "đ";
+        document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("registerBtn").style.display = "none";
+        document.getElementById("logoutBtn").style.display = "inline-block";
+        document.getElementById("googleBtn").style.display = "none";
+
+        if(savedUser === ADMIN_USER){
+            // Khôi phục đúng quyền Admin sau khi F5 / tải lại trang
+            isAdmin = true;
+            document.getElementById("userText").innerHTML =
+                "👑 " + savedUser;
+        } else {
+            isAdmin = false;
+            document.getElementById("userText").innerHTML =
+                "Xin chào, " + savedUser;
+
+            let wallet =
+            localStorage.getItem("walletBalance") || 0;
+            document.getElementById("walletText").innerHTML =
+                "Số dư ví: " +
+                Number(wallet).toLocaleString() + "đ";
+        }
     }
 
 }

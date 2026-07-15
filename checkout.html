@@ -116,6 +116,9 @@ let order = {
 
     orderId: orderId,
 
+    owner:
+    localStorage.getItem("currentUser") || "",
+
     customerName:
     document.getElementById("customerName").value,
 
