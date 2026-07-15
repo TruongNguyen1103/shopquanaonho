@@ -378,6 +378,50 @@
                 flex-shrink: 0;
             }
 
+        /* ===== ADMIN - TIN NHẮN KHÁCH HÀNG ===== */
+
+        .admin-chat-box {
+            width: 420px;
+            max-width: 90vw;
+            padding: 0 !important;
+            overflow: hidden;
+        }
+
+        #adminChatListStep {
+            padding: 25px;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+
+        .admin-conv-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .admin-conv-item:hover {
+                background: #f5f5f5;
+                border-color: #999;
+            }
+
+            .admin-conv-item p {
+                margin-top: 5px;
+                color: #666;
+                font-size: 13px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+        #adminChatThreadStep {
+            display: none;
+            flex-direction: column;
+            height: 560px;
+        }
+
         /* ===== FOOTER ===== */
 
         footer {
@@ -463,8 +507,16 @@
                     style="display:none;">
                 Đăng xuất
             </button>
-            <button onclick="openAdmin()">
+            <button id="addProductBtn"
+                    onclick="openAdmin()"
+                    style="display:none;">
                 + Sản phẩm
+            </button>
+
+            <button id="adminChatBtn"
+                    onclick="openAdminChat()"
+                    style="display:none;">
+                💬 Tin nhắn khách
             </button>
 
         </div>
@@ -955,6 +1007,45 @@
 
     </div>
 
+    <!-- ===== ADMIN - TIN NHẮN KHÁCH HÀNG ===== -->
+
+    <div class="modal" id="adminChatModal">
+
+        <div class="modal-box admin-chat-box">
+
+            <!-- Danh sách hội thoại -->
+            <div id="adminChatListStep">
+
+                <span class="close" onclick="closeAdminChat()">×</span>
+
+                <h2>💬 Tin nhắn khách hàng</h2>
+
+                <div id="adminConvList">Đang tải...</div>
+
+            </div>
+
+            <!-- Khung chat với 1 khách cụ thể -->
+            <div id="adminChatThreadStep">
+
+                <div class="chat-header">
+                    <span class="chat-back" onclick="backToConvList()">←</span>
+                    <span class="chat-title" id="adminChatCustomerName">Khách hàng</span>
+                </div>
+
+                <div class="chat-body" id="adminChatBody"></div>
+
+                <div class="chat-input-bar">
+                    <input type="text" id="adminChatInput" placeholder="Trả lời khách..."
+                           onkeypress="if(event.key==='Enter') adminSendReply()">
+                    <button onclick="adminSendReply()">➤</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <!-- ===== CART ===== -->
     <div class="cart-box">
 
@@ -1041,32 +1132,74 @@ function startChat(){
     showChatStep();
 }
 
-function showChatStep(){
+async function showChatStep(){
     document.getElementById("contactInfoStep").style.display = "none";
     document.getElementById("chatStep").style.display = "flex";
+
+    document.getElementById("chatBody").innerHTML =
+        `<div class="chat-note">Đang tải hội thoại...</div>`;
+
+    await syncChatFromServer();
     renderChatMessages();
     document.getElementById("chatInput").focus();
 }
 
 function escapeHtml(str){
-    return str
+    return String(str)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
+}
+
+// Lấy tin nhắn từ Firestore (gồm cả câu trả lời của shop) và gộp vào localStorage,
+// để khách hàng thấy được phản hồi dù đang mở trên thiết bị/trình duyệt nào.
+async function syncChatFromServer(){
+    let name = localStorage.getItem("contactName");
+    if(!name) return;
+    if(typeof window.fetchAllMessages !== "function") return;
+
+    try{
+        let serverMessages = await window.fetchAllMessages();
+        let myServerMessages = serverMessages.filter(m => m.name === name);
+
+        let localMessages = JSON.parse(localStorage.getItem("shopMessages")) || [];
+
+        let merged = localMessages.slice();
+        myServerMessages.forEach(sm=>{
+            let exists = merged.some(lm =>
+                lm.name === sm.name &&
+                lm.content === sm.content &&
+                lm.createdAt === sm.createdAt
+            );
+            if(!exists) merged.push(sm);
+        });
+
+        localStorage.setItem("shopMessages", JSON.stringify(merged));
+    }catch(e){
+        console.error("Không đồng bộ được tin nhắn từ server:", e);
+    }
 }
 
 function renderChatMessages(){
     let name = localStorage.getItem("contactName");
     let messages = JSON.parse(localStorage.getItem("shopMessages")) || [];
 
-    // Chỉ hiện tin nhắn của đúng người đang chat (theo tên đã lưu)
-    let myMessages = messages.filter(m => m.name === name);
+    // Chỉ hiện tin nhắn của đúng người đang chat (theo tên đã lưu), sắp theo thời gian
+    let myMessages = messages
+        .filter(m => m.name === name)
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
     let html = `<div class="chat-bubble shop">Xin chào ${escapeHtml(name)}! Shop có thể giúp gì cho bạn? 😊</div>`;
 
     myMessages.forEach(m => {
         if(m.type === "auto"){
             html += `<div class="chat-note">${escapeHtml(m.content)}</div>`;
+        } else if(m.sender === "shop"){
+            html += `
+            <div class="chat-bubble shop">
+                ${escapeHtml(m.content)}
+                <div class="chat-time">${m.createdAt}</div>
+            </div>`;
         } else {
             html += `
             <div class="chat-bubble user">
@@ -1095,7 +1228,8 @@ async function sendChatMessage(){
         contact: contact,
         content: content,
         createdAt: new Date().toLocaleString(),
-        type: "user"
+        type: "user",
+        sender: "customer"
     };
 
     let messages = JSON.parse(localStorage.getItem("shopMessages")) || [];
@@ -1107,7 +1241,8 @@ async function sendChatMessage(){
         contact: contact,
         content: "Cảm ơn bạn đã nhắn tin cho Fashion Shop. Hiện tại nhân viên chưa xem tin nhắn này, chúng tôi sẽ phản hồi trong thời gian sớm nhất. Nếu cần hỗ trợ gấp, vui lòng gọi hotline 1900 0002.",
         createdAt: new Date().toLocaleString(),
-        type: "auto"
+        type: "auto",
+        sender: "system"
     };
     messages.push(autoNote);
 
@@ -1123,6 +1258,166 @@ async function sendChatMessage(){
 
     input.value = "";
     renderChatMessages();
+}
+
+/* ===== ADMIN - XEM & TRẢ LỜI TIN NHẮN KHÁCH HÀNG ===== */
+
+let adminConversations = {};   // { "Tên khách": { contact, messages: [...] } }
+let adminCurrentCustomer = null;
+
+function openAdminChat(){
+    if(!isAdmin){
+        alert("Chỉ Admin mới xem được tin nhắn khách hàng!");
+        return;
+    }
+    document.getElementById("adminChatModal").style.display = "flex";
+    document.getElementById("adminChatListStep").style.display = "block";
+    document.getElementById("adminChatThreadStep").style.display = "none";
+    loadAdminConversations();
+}
+
+function closeAdminChat(){
+    document.getElementById("adminChatModal").style.display = "none";
+}
+
+async function loadAdminConversations(){
+    let listEl = document.getElementById("adminConvList");
+    listEl.innerHTML = "Đang tải...";
+
+    let allMessages = [];
+
+    if(typeof window.fetchAllMessages === "function"){
+        try{
+            allMessages = await window.fetchAllMessages();
+        }catch(e){
+            console.error("Không tải được tin nhắn từ server:", e);
+        }
+    }
+
+    // Gộp thêm tin nhắn lưu trên trình duyệt này (phòng khi chưa đồng bộ kịp)
+    let localMessages = JSON.parse(localStorage.getItem("shopMessages")) || [];
+    allMessages = allMessages.concat(localMessages);
+
+    adminConversations = {};
+
+    allMessages.forEach(m=>{
+        if(m.type === "auto") return; // bỏ qua tin tự động, chỉ hiện hội thoại thật
+        if(!m.name) return;
+
+        let key = m.name;
+        if(!adminConversations[key]){
+            adminConversations[key] = { contact: m.contact || "", messages: [] };
+        }
+
+        let exists = adminConversations[key].messages.some(x =>
+            x.content === m.content && x.createdAt === m.createdAt
+        );
+        if(!exists) adminConversations[key].messages.push(m);
+    });
+
+    let names = Object.keys(adminConversations);
+
+    if(names.length === 0){
+        listEl.innerHTML = "Chưa có khách hàng nào nhắn tin.";
+        return;
+    }
+
+    names.forEach(name=>{
+        adminConversations[name].messages.sort(
+            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
+    });
+
+    // Khách có tin nhắn mới nhất hiện lên đầu
+    names.sort((a, b)=>{
+        let lastA = adminConversations[a].messages.at(-1);
+        let lastB = adminConversations[b].messages.at(-1);
+        return new Date(lastB.createdAt) - new Date(lastA.createdAt);
+    });
+
+    let html = "";
+    names.forEach(name=>{
+        let conv = adminConversations[name];
+        let last = conv.messages.at(-1);
+        html += `
+        <div class="admin-conv-item" onclick="openAdminThread('${name.replace(/'/g, "\\'")}')">
+            <b>${escapeHtml(name)}</b>${conv.contact ? " - " + escapeHtml(conv.contact) : ""}
+            <p>${escapeHtml(last.content)}</p>
+        </div>`;
+    });
+
+    listEl.innerHTML = html;
+}
+
+function backToConvList(){
+    document.getElementById("adminChatThreadStep").style.display = "none";
+    document.getElementById("adminChatListStep").style.display = "block";
+    loadAdminConversations();
+}
+
+function openAdminThread(name){
+    adminCurrentCustomer = name;
+    document.getElementById("adminChatListStep").style.display = "none";
+    document.getElementById("adminChatThreadStep").style.display = "flex";
+    document.getElementById("adminChatCustomerName").innerText = name;
+    renderAdminThread();
+    document.getElementById("adminChatInput").focus();
+}
+
+function renderAdminThread(){
+    let conv = adminConversations[adminCurrentCustomer];
+    if(!conv) return;
+
+    let html = "";
+    conv.messages.forEach(m=>{
+        let side = (m.sender === "shop") ? "shop" : "user";
+        html += `
+        <div class="chat-bubble ${side}">
+            ${escapeHtml(m.content)}
+            <div class="chat-time">${m.createdAt}</div>
+        </div>`;
+    });
+
+    let body = document.getElementById("adminChatBody");
+    body.innerHTML = html;
+    body.scrollTop = body.scrollHeight;
+}
+
+async function adminSendReply(){
+    let input = document.getElementById("adminChatInput");
+    let content = input.value.trim();
+
+    if(content === "" || !adminCurrentCustomer) return;
+
+    let conv = adminConversations[adminCurrentCustomer];
+
+    let message = {
+        name: adminCurrentCustomer,
+        contact: conv ? conv.contact : "",
+        content: content,
+        createdAt: new Date().toLocaleString(),
+        type: "user",
+        sender: "shop"
+    };
+
+    conv.messages.push(message);
+
+    // Nếu khách đang chat trên cùng trình duyệt này (ví dụ admin test),
+    // lưu luôn vào localStorage để họ thấy ngay không cần chờ đồng bộ
+    let localMessages = JSON.parse(localStorage.getItem("shopMessages")) || [];
+    localMessages.push(message);
+    localStorage.setItem("shopMessages", JSON.stringify(localMessages));
+
+    if(typeof window.saveMessageToServer === "function"){
+        try{
+            await window.saveMessageToServer(message);
+        }catch(e){
+            console.error("Không lưu được lên server:", e);
+        }
+    }
+
+    input.value = "";
+    renderAdminThread();
 }
 
 /* ===== LOGIN ===== */
@@ -1151,6 +1446,8 @@ function closeLogin(){
     document.getElementById("registerBtn").style.display = "none";
     document.getElementById("logoutBtn").style.display = "inline-block";
     document.getElementById("googleBtn").style.display = "none";
+    document.getElementById("addProductBtn").style.display = "inline-block";
+    document.getElementById("adminChatBtn").style.display = "inline-block";
         alert("Đăng nhập Admin thành công!");
         closeLogin();
         return;
@@ -1404,6 +1701,8 @@ window.onload = function(){
             isAdmin = true;
             document.getElementById("userText").innerHTML =
                 "👑 " + savedUser;
+            document.getElementById("addProductBtn").style.display = "inline-block";
+            document.getElementById("adminChatBtn").style.display = "inline-block";
         } else {
             isAdmin = false;
             document.getElementById("userText").innerHTML =
@@ -1431,7 +1730,8 @@ import {
 import {
   getFirestore,
   collection,
-  addDoc
+  addDoc,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -1450,6 +1750,13 @@ const provider = new GoogleAuthProvider();
 
 window.saveMessageToServer = async function (message) {
   await addDoc(collection(db, "messages"), message);
+};
+
+// Lấy toàn bộ tin nhắn từ Firestore (dùng cho khách xem lại hội thoại
+// và cho Admin xem/trả lời tin nhắn của mọi khách hàng)
+window.fetchAllMessages = async function () {
+  const snapshot = await getDocs(collection(db, "messages"));
+  return snapshot.docs.map(d => d.data());
 };
 
 window.googleLogin = async function () {
