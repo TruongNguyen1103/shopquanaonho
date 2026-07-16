@@ -158,12 +158,26 @@
             display: flex;
             gap: 5px;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
 
             .product-buttons button {
                 flex: 1;
                 font-size: 12px;
+                min-width: 80px;
             }
+
+        .delete-btn {
+            background: #d9302f !important;
+        }
+
+            .delete-btn:hover {
+                background: #b3241f !important;
+            }
+
+        .admin-only {
+            display: none;
+        }
         /* ===== MODAL ===== */
 
         .modal {
@@ -544,11 +558,14 @@
                 <h3>Áo Hoodie Mùa Đông</h3>
                 <p class="price">300.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Hoodie Mùa Đông',300000)">
+                    <button onclick="addToCart('Áo Hoodie Mùa Đông',300000,'https://down-vn.img.susercontent.com/file/sg-11134201-7rbml-lq9jokwjehbu26')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Hoodie Mùa Đông',300000)">
+                    <button onclick="buyNow('Áo Hoodie Mùa Đông',300000,'https://down-vn.img.susercontent.com/file/sg-11134201-7rbml-lq9jokwjehbu26')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Hoodie Mùa Đông', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -561,11 +578,14 @@
                 <h3>Áo Khoác Len</h3>
                 <p class="price">320.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Khoác Len',320000)">
+                    <button onclick="addToCart('Áo Khoác Len',320000,'https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m4daz5ryiojz36')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Khoác Len',320000)">
+                    <button onclick="buyNow('Áo Khoác Len',320000,'https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m4daz5ryiojz36')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Khoác Len', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -578,11 +598,14 @@
                 <h3>Áo Sweater Basic</h3>
                 <p class="price">250.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Sweater Basic',250000)">
+                    <button onclick="addToCart('Áo Sweater Basic',250000,'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Sweater Basic',250000)">
+                    <button onclick="buyNow('Áo Sweater Basic',250000,'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Sweater Basic', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -595,11 +618,14 @@
                 <h3>Set Vest Thời Trang</h3>
                 <p class="price">1.250.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Set Vest Thời Trang',1250000)">
+                    <button onclick="addToCart('Set Vest Thời Trang',1250000,'set-vest-1250k.png')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Set Vest Thời Trang',1250000)">
+                    <button onclick="buyNow('Set Vest Thời Trang',1250000,'set-vest-1250k.png')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Set Vest Thời Trang', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -612,11 +638,14 @@
                 <h3>Váy Mùa Hè</h3>
                 <p class="price">270.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Váy Mùa Hè',270000)">
+                    <button onclick="addToCart('Váy Mùa Hè',270000,'https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=800&auto=format&fit=crop')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Váy Mùa Hè',270000)">
+                    <button onclick="buyNow('Váy Mùa Hè',270000,'https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=800&auto=format&fit=crop')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Váy Mùa Hè', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -629,11 +658,14 @@
                 <h3>Áo Thun Basic</h3>
                 <p class="price">190.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Thun Basic',190000)">
+                    <button onclick="addToCart('Áo Thun Basic',190000,'https://pubcdn.ivymoda.com/files/product/thumab/1400/2023/02/16/e6863ea53ac30ed538d4364629393ce9.jpg')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Thun Basic',190000)">
+                    <button onclick="buyNow('Áo Thun Basic',190000,'https://pubcdn.ivymoda.com/files/product/thumab/1400/2023/02/16/e6863ea53ac30ed538d4364629393ce9.jpg')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Thun Basic', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -646,11 +678,14 @@
                 <h3>Quần Jeans Form Rộng</h3>
                 <p class="price">299.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Quần Jeans Form Rộng',299000)">
+                    <button onclick="addToCart('Quần Jeans Form Rộng',299000,'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Quần Jeans Form Rộng',299000)">
+                    <button onclick="buyNow('Quần Jeans Form Rộng',299000,'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Quần Jeans Form Rộng', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -663,11 +698,14 @@
                 <h3>Đầm Tiểu Thư</h3>
                 <p class="price">520.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Đầm Tiểu Thư',520000)">
+                    <button onclick="addToCart('Đầm Tiểu Thư',520000,'https://file.hstatic.net/1000197303/file/dam-tieu-thu1_422bed68697842ed91fb57b1d214a748.jpg')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Đầm Tiểu Thư',520000)">
+                    <button onclick="buyNow('Đầm Tiểu Thư',520000,'https://file.hstatic.net/1000197303/file/dam-tieu-thu1_422bed68697842ed91fb57b1d214a748.jpg')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Đầm Tiểu Thư', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -680,11 +718,14 @@
                 <h3>Áo Polo Nam</h3>
                 <p class="price">149.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Polo Nam',149000)">
+                    <button onclick="addToCart('Áo Polo Nam',149000,'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Polo Nam',149000)">
+                    <button onclick="buyNow('Áo Polo Nam',149000,'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Polo Nam', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -697,11 +738,14 @@
                 <h3>Áo Sơ Mi Trắng</h3>
                 <p class="price">159.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Sơ Mi Trắng',159000)">
+                    <button onclick="addToCart('Áo Sơ Mi Trắng',159000,'https://images.unsplash.com/photo-1603252109303-2751441dd157')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Sơ Mi Trắng',159000)">
+                    <button onclick="buyNow('Áo Sơ Mi Trắng',159000,'https://images.unsplash.com/photo-1603252109303-2751441dd157')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Sơ Mi Trắng', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -714,11 +758,14 @@
                 <h3>Áo Sơ Mi Kẻ Sọc</h3>
                 <p class="price">229.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Sơ Mi Kẻ Sọc',229000)">
+                    <button onclick="addToCart('Áo Sơ Mi Kẻ Sọc',229000,'https://thoitrangbigsize.vn/wp-content/uploads/2025/04/8608-luoi-trang.jpg')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Sơ Mi Kẻ Sọc',229000)">
+                    <button onclick="buyNow('Áo Sơ Mi Kẻ Sọc',229000,'https://thoitrangbigsize.vn/wp-content/uploads/2025/04/8608-luoi-trang.jpg')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Sơ Mi Kẻ Sọc', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -731,11 +778,14 @@
                 <h3>Áo Thun Oversize</h3>
                 <p class="price">129.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Thun Oversize',129000)">
+                    <button onclick="addToCart('Áo Thun Oversize',129000,'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Thun Oversize',129000)">
+                    <button onclick="buyNow('Áo Thun Oversize',129000,'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Thun Oversize', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -748,11 +798,14 @@
                 <h3>Áo Thun In Hình</h3>
                 <p class="price">149.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Thun In Hình',149000)">
+                    <button onclick="addToCart('Áo Thun In Hình',149000,'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Thun In Hình',149000)">
+                    <button onclick="buyNow('Áo Thun In Hình',149000,'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Thun In Hình', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -765,11 +818,14 @@
                 <h3>Áo Hai Dây</h3>
                 <p class="price">69.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Hai Dây',69000)">
+                    <button onclick="addToCart('Áo Hai Dây',69000,'https://product.hstatic.net/200000000133/product/24aawe008b_-_24aqqe023d_e207ddfae48241acaf435ee111b733a6_master.jpg')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Hai Dây',69000)">
+                    <button onclick="buyNow('Áo Hai Dây',69000,'https://product.hstatic.net/200000000133/product/24aawe008b_-_24aqqe023d_e207ddfae48241acaf435ee111b733a6_master.jpg')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Hai Dây', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -779,16 +835,18 @@
             <img src="https://lados.vn/wp-content/uploads/2025/02/ao-thun-ba-lo-nam-dep-gia-tot-lados-ld9203-600x600.jpg">
             <div class="card-content">
                 <h3>Áo Ba Lỗ Nam</h3>
-                <p class="price">
-                    89.000đ
-                    <div class="product-buttons">
-                        <button onclick="addToCart('Áo Ba Lỗ Nam',89000)">
-                            Thêm vào giỏ
-                        </button>
-                        <button onclick="buyNow('Áo Ba Lỗ Nam',89000)">
-                            Mua ngay
-                        </button>
-                    </div>
+                <p class="price">89.000đ</p>
+                <div class="product-buttons">
+                    <button onclick="addToCart('Áo Ba Lỗ Nam',89000,'https://lados.vn/wp-content/uploads/2025/02/ao-thun-ba-lo-nam-dep-gia-tot-lados-ld9203-600x600.jpg')">
+                        Thêm vào giỏ
+                    </button>
+                    <button onclick="buyNow('Áo Ba Lỗ Nam',89000,'https://lados.vn/wp-content/uploads/2025/02/ao-thun-ba-lo-nam-dep-gia-tot-lados-ld9203-600x600.jpg')">
+                        Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Ba Lỗ Nam', this)">
+                        🗑️ Xóa
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -799,11 +857,14 @@
                 <h3>Áo Khoác Gió</h3>
                 <p class="price">349.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Khoác Gió',349000)">
+                    <button onclick="addToCart('Áo Khoác Gió',349000,'https://aokhoacnam.vn/upload/product/akn-182/ao-khoac-gio-nam-ghi-chinh-hang.jpg')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Khoác Gió',349000)">
+                    <button onclick="buyNow('Áo Khoác Gió',349000,'https://aokhoacnam.vn/upload/product/akn-182/ao-khoac-gio-nam-ghi-chinh-hang.jpg')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Khoác Gió', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -816,11 +877,14 @@
                 <h3>Áo Len Cổ Lọ</h3>
                 <p class="price">199.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Áo Len Cổ Lọ',199000)">
+                    <button onclick="addToCart('Áo Len Cổ Lọ',199000,'https://thoitrangbigsize.vn/wp-content/uploads/2024/09/BS3024.jpg')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Áo Len Cổ Lọ',199000)">
+                    <button onclick="buyNow('Áo Len Cổ Lọ',199000,'https://thoitrangbigsize.vn/wp-content/uploads/2024/09/BS3024.jpg')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Áo Len Cổ Lọ', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -833,11 +897,14 @@
                 <h3>Quần Dài Nam</h3>
                 <p class="price">159.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Quần Tây Nam',159000)">
+                    <button onclick="addToCart('Quần Tây Nam',159000,'https://nhatminhsports.vn/wp-content/uploads/2025/03/U2664630-1.jpg')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Quần Tây Nam',159000)">
+                    <button onclick="buyNow('Quần Tây Nam',159000,'https://nhatminhsports.vn/wp-content/uploads/2025/03/U2664630-1.jpg')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Quần Tây Nam', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -850,11 +917,14 @@
                 <h3>Mũ Bucket</h3>
                 <p class="price">59.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Mũ Bucket',59000)">
+                    <button onclick="addToCart('Mũ Bucket',59000,'https://nhatminhsports.vn/wp-content/uploads/2025/09/M20042_zoom_D.jpg')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Mũ Bucket',59000)">
+                    <button onclick="buyNow('Mũ Bucket',59000,'https://nhatminhsports.vn/wp-content/uploads/2025/09/M20042_zoom_D.jpg')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Mũ Bucket', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -867,11 +937,14 @@
                 <h3>Tất Nam nữ</h3>
                 <p class="price">20.000đ</p>
                 <div class="product-buttons">
-                    <button onclick="addToCart('Tất Nam nữ',20000)">
+                    <button onclick="addToCart('Tất Nam nữ',20000,'https://bizweb.dktcdn.net/thumb/1024x1024/100/449/472/products/sg-11134201-22110-9yawj7p4svjvb1-1668422066772.jpg?v=1668422071113')">
                         Thêm vào giỏ
                     </button>
-                    <button onclick="buyNow('Tất Nam nữ',20000)">
+                    <button onclick="buyNow('Tất Nam nữ',20000,'https://bizweb.dktcdn.net/thumb/1024x1024/100/449/472/products/sg-11134201-22110-9yawj7p4svjvb1-1668422066772.jpg?v=1668422071113')">
                         Mua ngay
+                    </button>
+                    <button class="delete-btn admin-only" onclick="deleteProductAdmin('Tất Nam nữ', this)">
+                        🗑️ Xóa
                     </button>
                 </div>
             </div>
@@ -1450,6 +1523,7 @@ function closeLogin(){
     document.getElementById("adminChatBtn").style.display = "inline-block";
         alert("Đăng nhập Admin thành công!");
         closeLogin();
+        updateAdminUI();
         return;
         }
 
@@ -1471,6 +1545,7 @@ function closeLogin(){
         alert("Đăng nhập thành công!");
         closeLogin();
     document.getElementById("introPage").style.display = "none";
+    updateAdminUI();
     }else{
         alert("Sai tài khoản hoặc mật khẩu!");
 
@@ -1528,7 +1603,7 @@ closeRegister();
 document.getElementById("introPage").style.display = "none";
 }
 
-/* ===== ADMIN ===== */
+/* ===== ADMIN - QUẢN LÝ SẢN PHẨM (THÊM / XÓA) ===== */
 
 function openAdmin(){
     if(!isAdmin){
@@ -1562,11 +1637,19 @@ function addProduct(){
 
             <h3>${name}</h3>
 
-            <p class="price">${price}đ</p>
+            <p class="price">${Number(price).toLocaleString()}đ</p>
 
-            <button onclick="addToCart('${name}',${price})">
-                Mua ngay
-            </button>
+            <div class="product-buttons">
+                <button onclick="addToCart('${name}',${price},'${image}')">
+                    Thêm vào giỏ
+                </button>
+                <button onclick="buyNow('${name}',${price},'${image}')">
+                    Mua ngay
+                </button>
+                <button class="delete-btn admin-only" onclick="deleteProductAdmin('${name}', this)">
+                    🗑️ Xóa
+                </button>
+            </div>
 
         </div>
 
@@ -1576,10 +1659,54 @@ function addProduct(){
 
     document.getElementById("productList").innerHTML += product;
 
+    updateAdminUI();
+
     alert("Thêm sản phẩm thành công!");
 
     closeAdmin();
 
+}
+
+// Xóa sản phẩm khỏi trang (chỉ Admin). Tên sản phẩm bị xóa được lưu lại
+// trong localStorage để không hiện lại nữa dù có tải lại trang.
+function deleteProductAdmin(name, btnEl){
+    if(!isAdmin){
+        alert("Chỉ Admin mới được xóa sản phẩm!");
+        return;
+    }
+
+    if(!confirm(`Bạn có chắc muốn xóa sản phẩm "${name}"?`)) return;
+
+    let card = btnEl.closest(".card");
+    if(card) card.remove();
+
+    let deletedProducts = JSON.parse(localStorage.getItem("deletedProducts")) || [];
+    if(!deletedProducts.includes(name)){
+        deletedProducts.push(name);
+        localStorage.setItem("deletedProducts", JSON.stringify(deletedProducts));
+    }
+
+    alert("Đã xóa sản phẩm!");
+}
+
+// Ẩn các sản phẩm đã bị Admin xóa trước đó (chạy khi tải lại trang)
+function hideDeletedProducts(){
+    let deletedProducts = JSON.parse(localStorage.getItem("deletedProducts")) || [];
+    if(deletedProducts.length === 0) return;
+
+    document.querySelectorAll("#productList .card").forEach(card=>{
+        let h3 = card.querySelector("h3");
+        if(h3 && deletedProducts.includes(h3.textContent.trim())){
+            card.remove();
+        }
+    });
+}
+
+// Hiện/ẩn các nút chỉ dành cho Admin (ví dụ nút Xóa sản phẩm)
+function updateAdminUI(){
+    document.querySelectorAll(".admin-only").forEach(el=>{
+        el.style.display = isAdmin ? "inline-block" : "none";
+    });
 }
 
 /* ===== CART ===== */
@@ -1591,7 +1718,7 @@ const ADMIN_USER = "anhzaiso1";
 const ADMIN_PASS = "1234567@";
 let total = 0;
 let cart = [];
-function addToCart(name, price){
+function addToCart(name, price, image){
 
     if(!isLoggedIn){
         alert("Vui lòng đăng nhập trước!");
@@ -1601,7 +1728,9 @@ function addToCart(name, price){
 
     cart.push({
         name: name,
-        price: price
+        price: price,
+        image: image || "",
+        quantity: 1
     });
 
     renderCart();
@@ -1622,6 +1751,7 @@ function renderCart(){
         total += Number(item.price);
         cartItems.innerHTML += `
         <div class="cart-item">
+            ${item.image ? `<img src="${item.image}" style="width:36px;height:36px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:8px;">` : ""}
             ${item.name} -
             ${item.price.toLocaleString()}đ
             <button
@@ -1652,7 +1782,7 @@ function checkout(){
     );
     window.location.href = "checkout.html";
 }
-function buyNow(name, price){
+function buyNow(name, price, image){
     if(!isLoggedIn){
        alert("Vui lòng đăng nhập trước!");
        openLogin();
@@ -1663,6 +1793,7 @@ function buyNow(name, price){
         JSON.stringify([{
             name:name,
             price:price,
+            image:image || "",
             quantity:1
         }])
     );
@@ -1685,6 +1816,10 @@ function logout(){
 }
 
 window.onload = function(){
+
+    // Ẩn các sản phẩm đã bị xóa trước đó, áp dụng cho mọi người xem trang
+    hideDeletedProducts();
+
     let savedUser =
     localStorage.getItem("currentUser");
 
@@ -1715,6 +1850,9 @@ window.onload = function(){
                 Number(wallet).toLocaleString() + "đ";
         }
     }
+
+    // Hiện/ẩn nút Xóa sản phẩm tùy theo quyền Admin
+    updateAdminUI();
 
 }
     </script>

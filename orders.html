@@ -3,12 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <title>Đơn hàng của tôi</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        h1.page-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .order-card {
+            border: 1px solid #ccc;
+            background: white;
+            padding: 15px;
+            margin: 10px auto;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        .order-card h3 {
+            margin-bottom: 8px;
+        }
+        .owner-badge {
+            display: inline-block;
+            background: #1f2a44;
+            color: white;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+        .status-badge {
+            display: inline-block;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            margin-left: 6px;
+            color: white;
+        }
+        .status-processing { background: #e0a800; }
+        .status-received   { background: #1971c2; }
+        .status-shipped    { background: #2b8a3e; }
+        .status-cancelled  { background: #c92a2a; }
+        select.status-select {
+            padding: 6px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 8px;
+        }
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        #emptyMsg {
+            text-align: center;
+            color: #777;
+            margin-top: 40px;
+        }
+        .order-products {
+            margin: 10px 0;
+        }
+        .order-product-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .order-product-item:last-child {
+            border-bottom: none;
+        }
+        .order-product-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+            background: #eee;
+        }
+        .order-product-info {
+            flex: 1;
+        }
+        .order-product-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .order-product-meta {
+            font-size: 13px;
+            color: #666;
+            margin-top: 2px;
+        }
+        .cancel-btn {
+            background: #d9302f;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 8px;
+            margin-right: 8px;
+        }
+        .refund-note {
+            background: #fff8e1;
+            border: 1px solid #ffe28a;
+            color: #7a5b00;
+            font-size: 13px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .modal-box {
+            background: white;
+            padding: 25px;
+            width: 360px;
+            max-width: 90vw;
+            border-radius: 10px;
+        }
+        .modal-box h2 {
+            margin-bottom: 15px;
+        }
+        .modal-box p.hint {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        .modal-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .modal-box select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: white;
+        }
+        .modal-box .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .modal-box .modal-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-confirm {
+            background: #d9302f;
+            color: white;
+        }
+        .btn-cancel {
+            background: #ddd;
+        }
+    </style>
 </head>
 <body>
 
-    <!--<h1>📦 Đơn hàng của tôi</h1>-->
+    <h1 class="page-title" id="pageTitle">📦 Đơn hàng của tôi</h1>
     <div id="orderList"></div>
+
+    <!-- ===== MODAL HỦY ĐƠN - XIN TÀI KHOẢN HOÀN TIỀN ===== -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-box">
+            <h2>Hủy đơn hàng</h2>
+            <p class="hint">Vui lòng cung cấp thông tin tài khoản để shop hoàn tiền (nếu đã thanh toán).</p>
+            <select id="cancelReason">
+                <option value="Đổi ý, không muốn mua nữa">Đổi ý, không muốn mua nữa</option>
+                <option value="Đặt nhầm sản phẩm/số lượng">Đặt nhầm sản phẩm/số lượng</option>
+                <option value="Giao hàng quá chậm">Giao hàng quá chậm</option>
+                <option value="Tìm được giá tốt hơn">Tìm được giá tốt hơn</option>
+                <option value="Muốn đổi thông tin nhận hàng">Muốn đổi thông tin nhận hàng</option>
+                <option value="Lý do khác">Lý do khác</option>
+            </select>
+            <input type="text" id="refundBank" placeholder="Tên ngân hàng">
+            <input type="text" id="refundAccountNumber" placeholder="Số tài khoản">
+            <input type="text" id="refundAccountHolder" placeholder="Tên chủ tài khoản">
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeCancelModal()">Đóng</button>
+                <button class="btn-confirm" onclick="confirmCancelOrder()">Xác nhận hủy</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+const ADMIN_USER = "anhzaiso1";
+
 // ===== KIỂM TRA ĐĂNG NHẬP =====
 let currentUser = localStorage.getItem("currentUser");
 
@@ -17,39 +222,196 @@ if (!currentUser) {
     window.location.href = "index.html";
 } else {
 
+let isAdminView = currentUser === ADMIN_USER;
+
 let allOrders =
 JSON.parse(localStorage.getItem("orders")) || [];
 
-// Chỉ lấy đơn hàng thuộc về tài khoản đang đăng nhập.
-// Đơn hàng cũ (tạo trước khi có trường "owner") sẽ không hiện ra nữa
-// vì không xác định được là của ai.
-let orders = allOrders.filter(order => order.owner === currentUser);
+// Admin xem TẤT CẢ đơn hàng của mọi khách.
+// Khách thường chỉ xem đơn hàng thuộc về tài khoản đang đăng nhập.
+// Đơn hàng cũ (tạo trước khi có trường "owner") sẽ không hiện ra với khách thường
+// vì không xác định được là của ai, nhưng admin vẫn thấy được (owner rỗng).
+let orders = isAdminView
+    ? allOrders.slice()
+    : allOrders.filter(order => order.owner === currentUser);
+
+if (isAdminView) {
+    document.getElementById("pageTitle").innerText = "📦 Tất cả đơn hàng (Admin)";
+    // Đơn mới nhất lên đầu cho dễ theo dõi
+    orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+
+function statusLabel(status){
+    if (status === "received") return { text: "Đã nhận đơn", cls: "status-received" };
+    if (status === "shipped") return { text: "Đã giao", cls: "status-shipped" };
+    if (status === "cancelled") return { text: "Đã hủy", cls: "status-cancelled" };
+    return { text: "Đang xử lý", cls: "status-processing" };
+}
+
+// Gộp các sản phẩm trùng tên+giá lại thành 1 dòng với số lượng cộng dồn
+function groupProducts(products){
+    let map = {};
+    (products || []).forEach(p=>{
+        let key = p.name + "|" + p.price;
+        if(!map[key]){
+            map[key] = {
+                name: p.name,
+                price: Number(p.price) || 0,
+                image: p.image || "",
+                quantity: 0
+            };
+        }
+        map[key].quantity += Number(p.quantity) || 1;
+    });
+    return Object.values(map);
+}
 
 function renderOrders(){
     let html = "";
 
     orders.forEach((order, index)=>{
 
+        let status = statusLabel(order.status);
+
+        let canCancel = (!order.status || order.status === "processing");
+
+        let refundHtml = "";
+        if (order.status === "cancelled" && order.refundInfo) {
+            refundHtml = `
+            <div class="refund-note">
+                ${order.cancelReason ? `📝 Lý do hủy: <b>${order.cancelReason}</b><br>` : ""}
+                💸 Yêu cầu hoàn tiền về: <b>${order.refundInfo.bankName}</b> -
+                STK ${order.refundInfo.accountNumber} (${order.refundInfo.accountHolder})
+            </div>`;
+        }
+
+        let productsHtml = groupProducts(order.products).map(p => `
+            <div class="order-product-item">
+                <img src="${p.image || 'https://via.placeholder.com/50?text=%20'}" alt="${p.name}">
+                <div class="order-product-info">
+                    <div class="order-product-name">${p.name}</div>
+                    <div class="order-product-meta">${p.price.toLocaleString()}đ &times; ${p.quantity}</div>
+                </div>
+            </div>
+        `).join("");
+
         html += `
-        <div style="border:1px solid #ccc;
-                    padding:10px;
-                    margin:10px;">
+        <div class="order-card">
             <h3>Đơn hàng #${index+1}</h3>
+            ${isAdminView ? `<span class="owner-badge">👤 ${order.owner || order.customerName || "Không rõ"}</span>` : ""}
+            <span class="status-badge ${status.cls}">${status.text}</span>
             <p>Mã đơn: ${order.orderId}</p>
+            <p>Người nhận: ${order.customerName || ""}</p>
+            <p>SĐT: ${order.customerPhone || ""}</p>
+            <p>Địa chỉ: ${order.customerAddress || ""}</p>
             <p>Ngày: ${order.createdAt}</p>
+            <div class="order-products">
+                ${productsHtml || "<p style='color:#999;font-size:13px;'>Không có thông tin sản phẩm</p>"}
+            </div>
             <p>Tổng tiền:
             ${Number(order.total).toLocaleString()}đ</p>
-            <button onclick="deleteOrder(${index})"
-                    style="background:red;color:white;border:none;
-                           padding:8px 12px;border-radius:5px;cursor:pointer;">
+            ${isAdminView ? `
+            <select class="status-select" onchange="updateOrderStatus(${index}, this.value)">
+                <option value="processing" ${(!order.status || order.status==="processing") ? "selected" : ""}>Đang xử lý</option>
+                <option value="received" ${order.status==="received" ? "selected" : ""}>Đã nhận đơn</option>
+                <option value="shipped" ${order.status==="shipped" ? "selected" : ""}>Đã giao</option>
+                <option value="cancelled" ${order.status==="cancelled" ? "selected" : ""}>Đã hủy</option>
+            </select>
+            ` : ""}
+            ${refundHtml}
+            <br>
+            ${isAdminView ? `
+            <button class="delete-btn" onclick="deleteOrder(${index})">
                 Xóa đơn hàng
             </button>
+            ` : (canCancel ? `
+            <button class="cancel-btn" onclick="openCancelModal(${index})">
+                Hủy đơn hàng
+            </button>
+            ` : "")}
         </div>
         `;
     });
 
     document.getElementById("orderList").innerHTML =
-    html || "Chưa có đơn hàng nào";
+    html || `<p id="emptyMsg">Chưa có đơn hàng nào</p>`;
+}
+
+function findRealIndex(target){
+    return allOrders.findIndex(o => o.orderId === target.orderId);
+}
+
+function updateOrderStatus(index, newStatus){
+    const target = orders[index];
+    const realIndex = findRealIndex(target);
+    if(realIndex !== -1){
+        allOrders[realIndex].status = newStatus;
+        localStorage.setItem("orders", JSON.stringify(allOrders));
+        orders[index].status = newStatus;
+    }
+    renderOrders();
+}
+
+// ===== HỦY ĐƠN HÀNG - XIN TÀI KHOẢN HOÀN TIỀN =====
+let cancelTargetIndex = null;
+
+function openCancelModal(index){
+    cancelTargetIndex = index;
+
+    // Gợi ý sẵn thông tin ngân hàng khách đã nhập lần trước (nếu có) cho tiện
+    document.getElementById("refundBank").value = localStorage.getItem("refundBank") || "";
+    document.getElementById("refundAccountNumber").value = localStorage.getItem("refundAccountNumber") || "";
+    document.getElementById("refundAccountHolder").value = localStorage.getItem("refundAccountHolder") || "";
+    document.getElementById("cancelReason").selectedIndex = 0;
+
+    document.getElementById("cancelModal").style.display = "flex";
+}
+
+function closeCancelModal(){
+    cancelTargetIndex = null;
+    document.getElementById("cancelModal").style.display = "none";
+}
+
+function confirmCancelOrder(){
+    if (cancelTargetIndex === null) return;
+
+    let bankName = document.getElementById("refundBank").value.trim();
+    let accountNumber = document.getElementById("refundAccountNumber").value.trim();
+    let accountHolder = document.getElementById("refundAccountHolder").value.trim();
+    let reason = document.getElementById("cancelReason").value;
+
+    if (!bankName || !accountNumber || !accountHolder) {
+        alert("Vui lòng nhập đầy đủ thông tin tài khoản để shop hoàn tiền!");
+        return;
+    }
+
+    const target = orders[cancelTargetIndex];
+    const realIndex = findRealIndex(target);
+
+    if (realIndex !== -1) {
+        allOrders[realIndex].status = "cancelled";
+        allOrders[realIndex].cancelReason = reason;
+        allOrders[realIndex].refundInfo = {
+            bankName: bankName,
+            accountNumber: accountNumber,
+            accountHolder: accountHolder,
+            requestedAt: new Date().toLocaleString()
+        };
+        localStorage.setItem("orders", JSON.stringify(allOrders));
+
+        orders[cancelTargetIndex].status = "cancelled";
+        orders[cancelTargetIndex].cancelReason = reason;
+        orders[cancelTargetIndex].refundInfo = allOrders[realIndex].refundInfo;
+    }
+
+    // Lưu lại thông tin tài khoản để lần sau khách không phải nhập lại
+    localStorage.setItem("refundBank", bankName);
+    localStorage.setItem("refundAccountNumber", accountNumber);
+    localStorage.setItem("refundAccountHolder", accountHolder);
+
+    closeCancelModal();
+    renderOrders();
+    alert("Đã gửi yêu cầu hủy đơn. Shop sẽ hoàn tiền vào tài khoản bạn cung cấp trong thời gian sớm nhất!");
 }
 
 function deleteOrder(index){
@@ -58,7 +420,7 @@ function deleteOrder(index){
     // Xác định đúng đơn hàng cần xóa trong mảng gốc (allOrders)
     // bằng cách so khớp orderId, tránh xóa nhầm đơn của người khác.
     const target = orders[index];
-    const realIndex = allOrders.findIndex(o => o.orderId === target.orderId);
+    const realIndex = findRealIndex(target);
 
     if(realIndex !== -1){
         allOrders.splice(realIndex, 1);
